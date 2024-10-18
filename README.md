@@ -6,7 +6,7 @@ Community driven 32-bit OS based on
 
 __Eth-OS__ is being created in the
 [programming everyday](https://www.youtube.com/watch?v=fyZ0Gs9W194&list=PL29dTm11fF9QNI7_xIxwjcaLFCeNhaCym&pp=iAQB)
-video series by [eprograms](https://www.youtube.com/@eprograms).
+youtube series by [eprograms](https://www.youtube.com/@eprograms).
 
 ## TODO list
 * [x] Boot process
@@ -33,6 +33,12 @@ Dependencies:
 To run you need `qemu` installed.
 
 ``` sh
-# To compile OS and make .iso image and run OS.
+# To compile OS and make .iso image.
 make
+
+# To compile OS and run it.
+make run
+
+# To clean-up
+make clean
 ```
