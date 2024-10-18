@@ -1,7 +1,7 @@
-# Eth-OS
+# Eth-OS Community Edition
 <img src="./.github/imgs/os-screenshot.png" />
 
-Community driven repository based on
+Community driven 32-bit OS based on
 [Eth-OS](https://github.com/ethanprogramser/eth-os).
 
 __Eth-OS__ is being created in the
