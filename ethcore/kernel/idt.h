@@ -1,22 +1,29 @@
+#ifndef __K_IDT_H__
+#define __K_IDT_H__
 
-struct idt_entry_struct{
-    uint16_t base_low;
-    uint16_t sel;
-    uint8_t always0;
-    uint8_t flags;
-    uint16_t base_high;
-}__attribute__((packed));
+#include "klib/kint.h"
 
-struct idt_ptr_struct{
-    uint16_t limit;
-    uint32_t base;
-}__attribute__((packed));
+struct InterruptRegisters;
+
+struct idt_entry_struct {
+  uint16_t base_low;
+  uint16_t sel;
+  uint8_t always0;
+  uint8_t flags;
+  uint16_t base_high;
+} __attribute__((packed));
+
+struct idt_ptr_struct {
+  uint16_t limit;
+  uint32_t base;
+} __attribute__((packed));
 
 void initIdt();
 void setIdtGate(uint8_t num, uint32_t base, uint16_t sel, uint8_t flags);
 
-void isr_handler(struct InterruptRegisters* regs);
-void irq_install_handler (int irq, void (*handler)(struct InterruptRegisters *r));
+void isr_handler(struct InterruptRegisters *regs);
+void irq_install_handler(int irq,
+                         void (*handler)(struct InterruptRegisters *r));
 
 extern void isr0();
 extern void isr1();
@@ -70,3 +77,5 @@ extern void irq12();
 extern void irq13();
 extern void irq14();
 extern void irq15();
+
+#endif // __K_IDT_H__

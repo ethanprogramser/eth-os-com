@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef __K_VGA_H__
+#define __K_VGA_H__
 
 #define COLOR8_BLACK 0
 #define COLOR8_BLUE 1
@@ -21,7 +21,9 @@
 #define width 80
 #define height 25
 
-void print(const char* s);
+void print(const char *s);
 void scrollUp();
 void newLine();
 void Reset();
+
+#endif // __K_VGA_H__
