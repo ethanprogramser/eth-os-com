@@ -30,7 +30,7 @@ iso: ethcore grub
 
 # Run
 run: all
-	qemu-system-i386 $(OUT_DIR)/iso/$(ISO_NAME)
+	qemu-system-i386 -drive format=raw,file=$(OUT_DIR)/iso/$(ISO_NAME)
 
 # Clean-up everything
 clean:
