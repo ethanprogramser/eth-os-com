@@ -29,6 +29,7 @@ Dependencies:
 * GRUB
 * xorriso
 * GNU Make
+* MTools
 
 To run you need `qemu` installed.
 

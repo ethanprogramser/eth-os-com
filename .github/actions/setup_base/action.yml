@@ -15,7 +15,8 @@ runs:
           make \
           grub \
           xorriso \
-          nasm
+          nasm \
+          mtools
 
     - name: Checkout Repository
       uses: actions/checkout@v4
