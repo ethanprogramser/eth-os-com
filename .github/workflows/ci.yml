@@ -1,0 +1,22 @@
+name: Build Eth-OS
+
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  build:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork
+    name: "Build Eth-OS"
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux
+    steps:
+      - name: Check repository actions
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github/actions
+
+      - name: Setup base
+        uses: ./.github/actions/setup_base
+
+      - name: Build Eth-OS
+        run: |
+          make
