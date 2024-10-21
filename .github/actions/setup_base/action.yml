@@ -14,7 +14,8 @@ runs:
           gcc \
           make \
           grub \
-          xorriso
+          xorriso \
+          nasm
 
     - name: Checkout Repository
       uses: actions/checkout@v4
