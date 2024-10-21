@@ -2,7 +2,7 @@ name: "Setup base"
 
 runs:
   using: "composite"
-  steps;
+  steps:
     - name: Setup base
       shell: bash
       run: |
