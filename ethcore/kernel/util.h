@@ -3,10 +3,11 @@
 
 #include "klib/kint.h"
 
-void outPortB(uint16_t Port, uint8_t Value);
-char inPortB(uint16_t port);
+void outPortB (uint16_t Port, uint8_t Value);
+char inPortB (uint16_t port);
 
-struct InterruptRegisters {
+struct InterruptRegisters
+{
   uint32_t cr2;
   uint32_t ds;
   uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;

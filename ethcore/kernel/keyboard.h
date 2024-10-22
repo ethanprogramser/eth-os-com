@@ -3,8 +3,8 @@
 
 struct InterruptRegisters;
 
-void initKeyboard();
-void keyboardHandler(struct InterruptRegisters *regs);
-void append(char *part);
+void initKeyboard ();
+void keyboardHandler (struct InterruptRegisters *regs);
+void append (char *part);
 
 #endif // __K_KEYBOARD_H__

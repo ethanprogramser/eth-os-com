@@ -9,7 +9,7 @@
 bool capsOn;
 bool capsLock;
 
-char text[100] = {0};
+char text[100] = { 0 };
 
 const uint32_t UNKNOWN = 0xFFFFFFFF;
 const uint32_t ESC = 0xFFFFFFFF - 1;
@@ -46,176 +46,198 @@ const uint32_t ALTGR = 0xFFFFFFFF - 31;
 const uint32_t NUMLCK = 0xFFFFFFFF - 32;
 
 const uint32_t lowercase[128] = {
-    UNKNOWN, ESC,     '1',     '2',     '3',     '4',     '5',     '6',
-    '7',     '8',     '9',     '0',     '-',     '=',     '\b',    '\t',
-    'q',     'w',     'e',     'r',     't',     'y',     'u',     'i',
-    'o',     'p',     '[',     ']',     '\n',    CTRL,    'a',     's',
-    'd',     'f',     'g',     'h',     'j',     'k',     'l',     ';',
-    '\'',    '`',     LSHFT,   '\\',    'z',     'x',     'c',     'v',
-    'b',     'n',     'm',     ',',     '.',     '/',     RSHFT,   '*',
-    ALT,     ' ',     CAPS,    F1,      F2,      F3,      F4,      F5,
-    F6,      F7,      F8,      F9,      F10,     NUMLCK,  SCRLCK,  HOME,
-    UP,      PGUP,    '-',     LEFT,    UNKNOWN, RIGHT,   '+',     END,
-    DOWN,    PGDOWN,  INS,     DEL,     UNKNOWN, UNKNOWN, UNKNOWN, F11,
-    F12,     UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
-    UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
-    UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
-    UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
-    UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN};
+  UNKNOWN, ESC,     '1',     '2',     '3',     '4',     '5',     '6',
+  '7',     '8',     '9',     '0',     '-',     '=',     '\b',    '\t',
+  'q',     'w',     'e',     'r',     't',     'y',     'u',     'i',
+  'o',     'p',     '[',     ']',     '\n',    CTRL,    'a',     's',
+  'd',     'f',     'g',     'h',     'j',     'k',     'l',     ';',
+  '\'',    '`',     LSHFT,   '\\',    'z',     'x',     'c',     'v',
+  'b',     'n',     'm',     ',',     '.',     '/',     RSHFT,   '*',
+  ALT,     ' ',     CAPS,    F1,      F2,      F3,      F4,      F5,
+  F6,      F7,      F8,      F9,      F10,     NUMLCK,  SCRLCK,  HOME,
+  UP,      PGUP,    '-',     LEFT,    UNKNOWN, RIGHT,   '+',     END,
+  DOWN,    PGDOWN,  INS,     DEL,     UNKNOWN, UNKNOWN, UNKNOWN, F11,
+  F12,     UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
+  UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
+  UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
+  UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
+  UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN
+};
 const uint32_t uppercase[128] = {
-    UNKNOWN, ESC,     '!',     '@',     '#',     '$',     '%',     '^',
-    '&',     '*',     '(',     ')',     '_',     '+',     '\b',    '\t',
-    'Q',     'W',     'E',     'R',     'T',     'Y',     'U',     'I',
-    'O',     'P',     '{',     '}',     '\n',    CTRL,    'A',     'S',
-    'D',     'F',     'G',     'H',     'J',     'K',     'L',     ':',
-    '"',     '~',     LSHFT,   '|',     'Z',     'X',     'C',     'V',
-    'B',     'N',     'M',     '<',     '>',     '?',     RSHFT,   '*',
-    ALT,     ' ',     CAPS,    F1,      F2,      F3,      F4,      F5,
-    F6,      F7,      F8,      F9,      F10,     NUMLCK,  SCRLCK,  HOME,
-    UP,      PGUP,    '-',     LEFT,    UNKNOWN, RIGHT,   '+',     END,
-    DOWN,    PGDOWN,  INS,     DEL,     UNKNOWN, UNKNOWN, UNKNOWN, F11,
-    F12,     UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
-    UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
-    UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
-    UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
-    UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN};
+  UNKNOWN, ESC,     '!',     '@',     '#',     '$',     '%',     '^',
+  '&',     '*',     '(',     ')',     '_',     '+',     '\b',    '\t',
+  'Q',     'W',     'E',     'R',     'T',     'Y',     'U',     'I',
+  'O',     'P',     '{',     '}',     '\n',    CTRL,    'A',     'S',
+  'D',     'F',     'G',     'H',     'J',     'K',     'L',     ':',
+  '"',     '~',     LSHFT,   '|',     'Z',     'X',     'C',     'V',
+  'B',     'N',     'M',     '<',     '>',     '?',     RSHFT,   '*',
+  ALT,     ' ',     CAPS,    F1,      F2,      F3,      F4,      F5,
+  F6,      F7,      F8,      F9,      F10,     NUMLCK,  SCRLCK,  HOME,
+  UP,      PGUP,    '-',     LEFT,    UNKNOWN, RIGHT,   '+',     END,
+  DOWN,    PGDOWN,  INS,     DEL,     UNKNOWN, UNKNOWN, UNKNOWN, F11,
+  F12,     UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
+  UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
+  UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
+  UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
+  UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN
+};
 
-const uint32_t val[128] = {'c'};
+const uint32_t val[128] = { 'c' };
 
-void append(char *part) {
+void
+append (char *part)
+{
   uint8_t i = 0;
   uint8_t j = 0;
-  while (text[i] != '\0') {
+  while (text[i] != '\0')
+  {
     i++;
   }
-  while (part[j] != '\0') {
+  while (part[j] != '\0')
+  {
     text[i] = part[j];
     i++;
     j++;
   }
 }
 
-void rm() {
+void
+rm ()
+{
   uint8_t i = 0;
-  while (text[i] != '\0') {
+  while (text[i] != '\0')
+  {
     i++;
   }
   text[--i] = text[i];
 }
 
-void clear() {
+void
+clear ()
+{
   uint8_t p = 0;
-  while (text[p] != '\0') {
+  while (text[p] != '\0')
+  {
     text[p] = '\0';
     p++;
   }
 }
 
-void delp(char p, char *t) {
-  if (p == 0) {
-    append(t);
-    print(t);
+void
+delp (char p, char *t)
+{
+  if (p == 0)
+  {
+    append (t);
+    print (t);
   }
 }
 
-void parser(uint8_t code) {
+void
+parser (uint8_t code)
+{
   char buff[100];
   uint8_t i = 0;
-  while (text[i] != lowercase[code]) {
+  while (text[i] != lowercase[code])
+  {
     i++;
   }
-  for (uint8_t p = 0; p > i; p++) {
+  for (uint8_t p = 0; p > i; p++)
+  {
     buff[p] = text[p];
   }
-  print(buff);
+  print (buff);
 }
 
-void keyboardHandler(struct InterruptRegisters *regs) {
-  char scanCode = inPortB(0x60) & 0x7F; // What key is pressed
-  char press = inPortB(0x60) & 0x80;    // Press down, or released
+void
+keyboardHandler (struct InterruptRegisters *regs)
+{
+  char scanCode = inPortB (0x60) & 0x7F; // What key is pressed
+  char press = inPortB (0x60) & 0x80;    // Press down, or released
 
-  switch (scanCode) {
+  switch (scanCode)
+  {
   case 1:
   case 29:
   case 16:
-    delp(press, "q");
-    print("\n");
-    print(text);
+    delp (press, "q");
+    print ("\n");
+    print (text);
     break;
   case 17:
-    delp(press, "w");
+    delp (press, "w");
     break;
   case 18:
-    delp(press, "e");
+    delp (press, "e");
     break;
   case 19:
-    delp(press, "r");
+    delp (press, "r");
     break;
   case 20:
-    delp(press, "t");
+    delp (press, "t");
     break;
   case 21:
-    delp(press, "y");
+    delp (press, "y");
     break;
   case 22:
-    delp(press, "u");
+    delp (press, "u");
     break;
   case 23:
-    delp(press, "i");
+    delp (press, "i");
     break;
   case 24:
-    delp(press, "o");
+    delp (press, "o");
     break;
   case 25:
-    delp(press, "p");
+    delp (press, "p");
     break;
   case 30:
-    delp(press, "a");
+    delp (press, "a");
     break;
   case 31:
-    delp(press, "s");
+    delp (press, "s");
     break;
   case 32:
-    delp(press, "d");
+    delp (press, "d");
     break;
   case 33:
-    delp(press, "f");
+    delp (press, "f");
     break;
   case 34:
-    delp(press, "g");
+    delp (press, "g");
     break;
   case 35:
-    delp(press, "h");
+    delp (press, "h");
     break;
   case 36:
-    delp(press, "j");
+    delp (press, "j");
     break;
   case 37:
-    delp(press, "k");
+    delp (press, "k");
     break;
   case 38:
-    delp(press, "l");
+    delp (press, "l");
     break;
   case 45:
-    delp(press, "z");
+    delp (press, "z");
     break;
   case 46:
-    delp(press, "c");
+    delp (press, "c");
     break;
   case 47:
-    delp(press, "v");
+    delp (press, "v");
     break;
   case 48:
-    delp(press, "b");
+    delp (press, "b");
     break;
   case 49:
-    delp(press, "n");
+    delp (press, "n");
     break;
   case 50:
-    delp(press, "m");
+    delp (press, "m");
     break;
   case 57:
-    delp(press, " ");
+    delp (press, " ");
     break;
   case 56:
   case 59:
@@ -233,44 +255,60 @@ void keyboardHandler(struct InterruptRegisters *regs) {
     break;
   case 42:
     // shift key
-    if (press == 0) {
+    if (press == 0)
+    {
       capsOn = true;
-    } else {
+    }
+    else
+    {
       capsOn = false;
     }
     break;
   case 58:
-    if (!capsLock && press == 0) {
+    if (!capsLock && press == 0)
+    {
       capsLock = true;
-    } else if (capsLock && press == 0) {
+    }
+    else if (capsLock && press == 0)
+    {
       capsLock = false;
     }
     break;
   default:
-    if (press == 0) {
-      if (lowercase[scanCode] == '\b') {
-        rm();
+    if (press == 0)
+    {
+      if (lowercase[scanCode] == '\b')
+      {
+        rm ();
       }
-      if (lowercase[scanCode] == '\n') {
+      if (lowercase[scanCode] == '\n')
+      {
         // print("\nethos-->");
-        print("\n");
-        print(text);
-        print("\nethos-->");
+        print ("\n");
+        print (text);
+        print ("\nethos-->");
         // parser(57);
-        clear();
-      } else {
-        if (capsOn || capsLock) {
-          __kprintf("%c", uppercase[scanCode]);
-        } else {
-          __kprintf("%c", lowercase[scanCode]);
+        clear ();
+      }
+      else
+      {
+        if (capsOn || capsLock)
+        {
+          __kprintf ("%c", uppercase[scanCode]);
+        }
+        else
+        {
+          __kprintf ("%c", lowercase[scanCode]);
         }
       }
     }
   }
 }
 
-void initKeyboard() {
+void
+initKeyboard ()
+{
   capsOn = false;
   capsLock = false;
-  irq_install_handler(1, &keyboardHandler);
+  irq_install_handler (1, &keyboardHandler);
 }

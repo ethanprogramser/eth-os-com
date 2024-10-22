@@ -21,9 +21,9 @@
 #define width 80
 #define height 25
 
-void print(const char *s);
-void scrollUp();
-void newLine();
-void Reset();
+void print (const char *s);
+void scrollUp ();
+void newLine ();
+void Reset ();
 
 #endif // __K_VGA_H__
