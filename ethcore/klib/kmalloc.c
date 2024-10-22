@@ -1,5 +1,5 @@
 #include "malloc.h"
-#include "stdint.h"
+#include "kint.h"
 
 uint32_t mem_start = 0x100000;
 
