@@ -1,6 +1,6 @@
 #include "klib/kmemory.h"
 
-uint32_t mem_start = 0x100000
+uint32_t mem_start = 0x100000;
 void *
 __kmemcpy (void *dst, const void *src, size_t n)
 {
