@@ -1,6 +1,9 @@
 #ifndef __K_KEYCODES_H__
 #define __K_KEYCODES_H__
 
+#include "kernel/layout_mappings.h"
+#include "kernel/scancodes.h"
+
 enum Keycode
 {
   KEYCODE_BACKSPACE = 0x0001,
@@ -74,16 +77,39 @@ enum Keycode
   KEYCODE_F10 = 0x0059,
   KEYCODE_F11 = 0x005A,
   KEYCODE_F12 = 0x005B,
+
+  KEYCODE_LOCK = 0x005C,
+
+  KEYCODE_UP = 0x0060,
+  KEYCODE_LEFT = 0x0061,
+  KEYCODE_DOWN = 0x0062,
+  KEYCODE_RIGHT = 0x0063,
+
+  KEYCODE_PRIOR = 0x0070,
+  KEYCODE_PGUP = 0x0070, // Alias for KEYCODE_PRIOR
+  KEYCODE_NEXT = 0x0071,
+  KEYCODE_PGDOWN = 0x0071, // Alias for KEYCODE_NEXT
+
+  KEYCODE_INSERT = 0x0072,
+  KEYCODE_HOME = 0x0073,
+  KEYCODE_END = 0x0074,
+  KEYCODE_DELETE = 0x0075,
 };
 
 enum KeyModifier
 {
   KEYMOD_LSHIFT = 0x01000,
   KEYMOD_RSHIFT = 0x02000,
-  KEYMOD_LCONTORL = 0x0400,
+  KEYMOD_LCONTROL = 0x0400,
   KEYMOD_RCONTROL = 0x0800,
   KEYMOD_LALT = 0x10000,
   KEYMOD_RALT = 0x20000,
+  KEYMOD_LSUPER = 0x40000,
+  KEYMOD_RSUPER = 0x80000,
 };
+
+static enum Keycode scancode_to_keycode (enum Scancode, enum LayoutMapping);
+
+static enum KeyModifier scancode_to_keymodifier (enum Scancode);
 
 #endif // __K_KEYCODES_H__
