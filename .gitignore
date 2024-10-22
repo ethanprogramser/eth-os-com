@@ -1,3 +1,6 @@
+.cache/
 obj/
 build/
 out/
+compile_commands.json
+make_output.txt

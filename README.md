@@ -23,13 +23,15 @@ youtube series by [eprograms](https://www.youtube.com/@eprograms).
 * [ ] Code editor
 
 ## Manual build
-Dependencies:
+Tools:
 * NASM
 * C compiler
 * GRUB
 * xorriso
 * GNU Make
 * MTools
+* [compiledb](https://github.com/nickdiego/compiledb) (to generate
+  `compile_commands.json` for clangd)
 
 To run you need `qemu` installed.
 
@@ -42,4 +44,12 @@ make run
 
 # To clean-up
 make clean
+
+# OR (needs compiledb)
+# This variant generates `compile_commands.json` for clangd
+./compile.sh
+
+./compile_and_run.sh
+
+./clean.sh
 ```
