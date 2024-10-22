@@ -30,6 +30,8 @@ Tools:
 * xorriso
 * GNU Make
 * MTools
+
+Optional:
 * [compiledb](https://github.com/nickdiego/compiledb) (to generate
   `compile_commands.json` for clangd)
 
