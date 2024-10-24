@@ -1,4 +1,5 @@
 #include "kernel/keycodes.h"
+#include "kernel/layout_mappings.h"
 
 static enum Keycode qwerty_keycodes[0xFF] = {
   0,
@@ -34,7 +35,7 @@ static enum Keycode qwerty_keycodes[0xFF] = {
   KEYCODE_BRACC,
   KEYCODE_RETURN,
 
-  0,
+  KEYCODE_LCONTROL,
 
   KEYCODE_A,
   KEYCODE_S,
@@ -50,7 +51,7 @@ static enum Keycode qwerty_keycodes[0xFF] = {
 
   KEYCODE_TILDE,
 
-  0,
+  KEYCODE_LSHIFT,
 
   KEYCODE_BSLASH,
 
@@ -119,27 +120,13 @@ static enum Keycode qwerty_keycodes[0xFF] = {
   0,
 };
 
-static enum Keycode
+enum Keycode
 scancode_to_keycode (enum Scancode scancode, enum LayoutMapping layout)
 {
-  // TODO: make use of `layout`.
-  return qwerty_keycodes[scancode & 0xFF];
-}
-
-static enum KeyModifier
-scancode_to_keymodifier (enum Scancode scancode)
-{
-  switch (scancode)
+  switch (layout)
   {
-  case SCANCODE_LSHIFT:
-    return KEYMOD_LSHIFT;
-  case SCANCODE_LCONTROL:
-    return KEYMOD_LCONTROL;
-  case SCANCODE_LALT:
-    return KEYMOD_LALT;
-  case SCANCODE_LWIN:
-    return KEYMOD_LSUPER;
+  case LAYOUT_MAPPING_DVORAK: // FIXME: not implemented yet.
   default:
-    return 0;
+    return qwerty_keycodes[scancode & 0xFF];
   }
 }
