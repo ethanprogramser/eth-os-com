@@ -1,5 +1,7 @@
 # Eth-OS Community Edition
 <img src="./.github/imgs/os-screenshot.png" />
+![GitHub last commit](https://img.shields.io/github/last-commit/ethanprogramser/eth-os-com)
+
 
 Community driven 32-bit OS based on
 [Eth-OS](https://github.com/ethanprogramser/eth-os).
