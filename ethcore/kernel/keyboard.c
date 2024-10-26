@@ -9,7 +9,7 @@
 bool capsOn;
 bool capsLock;
 
-char text[100] = { 0 };
+char text[1024] = { 0 };
 
 const uint32_t UNKNOWN = 0xFFFFFFFF;
 const uint32_t ESC = 0xFFFFFFFF - 1;
