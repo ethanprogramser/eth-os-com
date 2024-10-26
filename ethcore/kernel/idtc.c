@@ -2,6 +2,7 @@
 #include "kernel/util.h"
 #include "kernel/vga.h"
 #include "klib/kint.h"
+#include "klib/kio.h"
 #include "klib/kmemory.h"
 
 struct idt_entry_struct idt_entries[256];
@@ -139,9 +140,9 @@ isr_handler (struct InterruptRegisters *regs)
 {
   if (regs->int_no < 32)
   {
-    print (exception_messages[regs->int_no]);
-    print ("\n");
-    print ("Exception! System Halted\n");
+    __kputs (exception_messages[regs->int_no]);
+    __kputs ("\n");
+    __kputs ("Exception! System Halted\n");
     for (;;)
       ;
   }

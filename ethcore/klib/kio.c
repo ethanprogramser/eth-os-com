@@ -22,14 +22,14 @@ int *__kprintf_number (int *, int, char, int);
 void
 __kputc (char c)
 {
-  print (&c);
+  vga_print (c);
 }
 
 void
 __kputs (const char *s)
 {
   for (; *s; s++)
-    __kputc (*s);
+    vga_print (*s);
 }
 
 void

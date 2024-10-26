@@ -109,7 +109,8 @@ rm ()
   {
     i++;
   }
-  text[--i] = text[i];
+  text[i - 1] = text[i];
+  i--;
 }
 
 void
@@ -129,7 +130,7 @@ delp (char p, char *t)
   if (p == 0)
   {
     append (t);
-    print (t);
+    __kputs (t);
   }
 }
 
@@ -146,7 +147,7 @@ parser (uint8_t code)
   {
     buff[p] = text[p];
   }
-  print (buff);
+  __kputs (buff);
 }
 
 void
@@ -161,8 +162,8 @@ keyboardHandler (struct InterruptRegisters *regs)
   case 29:
   case 16:
     delp (press, "q");
-    print ("\n");
-    print (text);
+    __kputc ('\n');
+    __kputs (text);
     break;
   case 17:
     delp (press, "w");
@@ -284,9 +285,9 @@ keyboardHandler (struct InterruptRegisters *regs)
       if (lowercase[scanCode] == '\n')
       {
         // print("\nethos-->");
-        print ("\n");
-        print (text);
-        print ("\nethos-->");
+        __kputc ('\n');
+        __kputs (text);
+        __kputs ("\nethos-->");
         // parser(57);
         clear ();
       }
@@ -294,11 +295,11 @@ keyboardHandler (struct InterruptRegisters *regs)
       {
         if (capsOn || capsLock)
         {
-          __kprintf ("%c", uppercase[scanCode]);
+          __kputc (uppercase[scanCode]);
         }
         else
         {
-          __kprintf ("%c", lowercase[scanCode]);
+          __kputc (lowercase[scanCode]);
         }
       }
     }
