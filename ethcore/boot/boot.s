@@ -17,7 +17,6 @@ start:
 HaltKernel:
     CLI
     HLT
-    JMP HaltKernel
 
 section .bss
 RESB 8192
