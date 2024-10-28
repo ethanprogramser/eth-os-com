@@ -1,5 +1,6 @@
 #include "kernel/gdt.h"
 #include "kernel/idt.h"
+#include "kernel/kernel_shell.h"
 #include "kernel/keyboard.h"
 #include "kernel/timer.h"
 #include "kernel/vga.h"
@@ -12,16 +13,11 @@ main (void)
   initGdt ();
   initIdt ();
   initTimer ();
-  initKeyboard ();
   vga_init ();
-  __kputs ("######################\n");
-  __kputs ("#        ETHOS       #\n");
-  __kputs ("######################\n");
-  vga_set_color (VGA_COLOR_BLUE, VGA_COLOR_WHITE);
+  keyboard_init ();
 
-  __kputs ("ethos-->");
-  vga_enable_cursor ();
-  vga_clear_screen ();
-  for (;;)
-    ;
+  __kputs ("Loading Eth-OS...\n");
+
+  kernel_shell_init ();
+  kernel_shell_loop ();
 }
