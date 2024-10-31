@@ -8,6 +8,6 @@ struct InterruptRegisters;
 
 void keyboard_init (void);
 void keyboard_handler (struct InterruptRegisters *);
-enum Keycode keyboard_get_key (void);
+void keyboard_for_each_key (void (*func) (enum Keycode, void *), void *data);
 
 #endif // __K_KEYBOARD_H__
