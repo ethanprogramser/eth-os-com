@@ -7,8 +7,7 @@
 #include "klib/kint.h"
 #include "klib/kio.h"
 
-void
-kmain (void)
+void kmain (void)
 {
   initGdt ();
   initIdt ();
