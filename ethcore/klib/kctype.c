@@ -62,7 +62,7 @@
  * 11th -> isdigit
  * 12th -> isxdigit
  */
-static const unsigned short SYMBOL_TABLE[256] = {
+const unsigned short SYMBOL_TABLE[256] = {
   // control codes 1
   0b0000000000000001, 0b0000000000000001, 0b0000000000000001,
   0b0000000000000001, 0b0000000000000001, 0b0000000000000001,
@@ -173,85 +173,85 @@ static const unsigned short SYMBOL_TABLE[256] = {
   0b0000000000000000, 0b0000000000000000
 };
 
-static int
+int
 __kisalnum (char c)
 {
   return SYMBOL_TABLE[c] & (1 << 6);
 }
 
-static int
+int
 __kisalpha (char c)
 {
   return SYMBOL_TABLE[c] & (1 << 7);
 }
 
-static int
+int
 __kisblank (char c)
 {
   return SYMBOL_TABLE[c] & (1 << 3);
 }
 
-static int
+int
 __kiscntrl (char c)
 {
   return SYMBOL_TABLE[c] & 1;
 }
 
-static int
+int
 __kisdigit (char c)
 {
   return SYMBOL_TABLE[c] & (1 << 10);
 }
 
-static int
+int
 __kisgraph (char c)
 {
   return SYMBOL_TABLE[c] & (1 << 4);
 }
 
-static int
+int
 __kislower (char c)
 {
   return SYMBOL_TABLE[c] & (1 << 9);
 }
 
-static int
+int
 __kisprint (char c)
 {
   return SYMBOL_TABLE[c] & (1 << 1);
 }
 
-static int
+int
 __kispunct (char c)
 {
   return SYMBOL_TABLE[c] & (1 << 5);
 }
 
-static int
+int
 __kisspace (char c)
 {
   return SYMBOL_TABLE[c] & (1 << 2);
 }
 
-static int
+int
 __kisupper (char c)
 {
   return SYMBOL_TABLE[c] & (1 << 8);
 }
 
-static int
+int
 __kisxdigit (char c)
 {
   return SYMBOL_TABLE[c] & (1 << 11);
 }
 
-static char
+char
 __ktoupper (char c)
 {
   return __kisalpha (c) > 0 ? c & ~0x20 : c;
 }
 
-static char
+char
 __ktolower (char c)
 {
   return __kisalpha (c) > 0 ? c | 0x20 : c;
