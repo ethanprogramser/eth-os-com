@@ -2,6 +2,7 @@
 #include "kernel/keyboard.h"
 #include "kernel/keycodes.h"
 #include "kernel/vga.h"
+#include "klib/kctype.h"
 #include "klib/kio.h"
 #include "klib/kmemory.h"
 
@@ -17,6 +18,7 @@ struct KernelShellState
   char line_text[0xFF];
   uint8_t position;
   bool caps;
+  uint8_t shifts_pressed;
   enum KernelShellStatus status;
 };
 
@@ -134,8 +136,8 @@ static const char keycode_mapping_shifted[0xFF]
         // 0x80-0x87
         0, 0, 0, 0, 0, 0, 0, 0 };
 
-char __kernel_shell_dispatch_keycode (enum Keycode keycode, bool shifted);
-void __kernel_shell_handle_key (enum Keycode keycode, void *data);
+char __kernel_shell_translate_keycode (enum Keycode keycode, bool shifted);
+void __kernel_shell_handle_event (struct KeyboardEvent *event, void *data);
 
 void
 kernel_shell_init (void)
@@ -159,7 +161,8 @@ kernel_shell_loop (void)
     {
     case KERNEL_SHELL_STATUS_WAITING:
     {
-      keyboard_for_each_key (__kernel_shell_handle_key, &kernel_shell_state);
+      keyboard_for_each_event (__kernel_shell_handle_event,
+                               &kernel_shell_state);
     }
     break;
 
@@ -175,25 +178,69 @@ kernel_shell_loop (void)
 }
 
 char
-__kernel_shell_dispatch_keycode (enum Keycode keycode, bool shifted)
+__kernel_shell_translate_keycode (enum Keycode keycode, bool shifted)
 {
   return shifted ? keycode_mapping_shifted[keycode]
                  : keycode_mapping_normal[keycode];
 }
 
 void
-__kernel_shell_handle_key (enum Keycode keycode, void *data)
+__kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
 {
   struct KernelShellState *state = (struct KernelShellState *)data;
 
-  char c = __kernel_shell_dispatch_keycode (keycode, false);
-  if (c <= 0)
+  switch (event->event_type)
   {
-    switch (keycode)
+  case KEYBOARD_EVENT_TYPE_PRESSED:
+  {
+    char c = __kernel_shell_translate_keycode (event->keycode,
+                                               state->shifts_pressed > 0);
+    if (c <= 0)
     {
-    case KEYCODE_CAPS:
+      switch (event->keycode)
+      {
+      case KEYCODE_CAPS:
+      {
+        state->caps = !state->caps;
+      }
+      break;
+
+      case KEYCODE_LSHIFT:
+      case KEYCODE_RSHIFT:
+      {
+        state->shifts_pressed++;
+      }
+      break;
+
+      default:
+        break;
+      }
+    }
+    else
     {
-      state->caps = !state->caps;
+      c = state->caps ? __ktoggle (c) : c;
+
+      if (state->position < 0xFF)
+      {
+        state->line_text[state->position++] = c;
+        __kputc (c);
+      }
+      else
+      {
+        __kputs ("\nYou have entered maximum of 255 characters.\n");
+      }
+    }
+  }
+  break;
+
+  case KEYBOARD_EVENT_TYPE_RELEASED:
+  {
+    switch (event->keycode)
+    {
+    case KEYCODE_LSHIFT:
+    case KEYCODE_RSHIFT:
+    {
+      state->shifts_pressed--;
     }
     break;
 
@@ -201,18 +248,9 @@ __kernel_shell_handle_key (enum Keycode keycode, void *data)
       break;
     }
   }
-  else
-  {
-    c = state->caps ? c ^ 0x20 : c;
+  break;
 
-    if (state->position < 0xFF)
-    {
-      state->line_text[state->position++] = c;
-      __kputc (c);
-    }
-    else
-    {
-      __kputs ("\nYou have entered maximum of 255 characters.\n");
-    }
+  default:
+    break;
   }
 }
