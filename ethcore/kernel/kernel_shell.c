@@ -91,8 +91,12 @@ kernel_shell_loop (void)
   enum Keycode key = 0;
   while (1)
   {
-    key = keyboard_get_last_key ();
-    if (!keyboard_was_key_pressed (key) && keyboard_is_key_pressed (key))
+    enum Keycode current_key = keyboard_get_key ();
+    if (key == current_key)
+      continue;
+    else
+      key = current_key;
+    if (key > 0)
     {
       // bool shift_pressed = keyboard_is_key_pressed (KEYCODE_LSHIFT)
       //                      || keyboard_is_key_pressed (KEYCODE_RSHIFT);
