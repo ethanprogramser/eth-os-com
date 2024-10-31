@@ -7,17 +7,16 @@ section .text
     DD -(0x1BADB002 + 0x00000000)
 
 global start
-extern main
+extern kmain
 
 start:
     CLI
     MOV esp, stack_space
-    CALL main
+    CALL kmain
     HLT
 HaltKernel:
     CLI
     HLT
-    JMP HaltKernel
 
 section .bss
 RESB 8192

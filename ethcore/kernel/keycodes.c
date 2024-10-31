@@ -19,6 +19,7 @@ static enum Keycode qwerty_keycodes[0xFF] = {
 
   KEYCODE_MINUS,
   KEYCODE_EQUAL,
+  KEYCODE_BACKSPACE,
   KEYCODE_TAB,
 
   KEYCODE_Q,
