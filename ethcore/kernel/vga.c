@@ -63,6 +63,13 @@ vga_clear_color (void)
 }
 
 void
+vga_clear_screen (void)
+{
+  __kmemset (vga_state.base, 0, vga_state.width * vga_state.height * 2);
+  vga_clear_color ();
+}
+
+void
 vga_print (char c)
 {
   switch (c)

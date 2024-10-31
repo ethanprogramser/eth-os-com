@@ -143,7 +143,7 @@ void
 kernel_shell_init (void)
 {
   vga_set_color (VGA_COLOR_BLACK, VGA_COLOR_WHITE);
-  vga_clear_color ();
+  vga_clear_screen ();
 
   __kputs ("Welcome to Kernel Shell.\n\n");
   __kmemset (&kernel_shell_state, 0, sizeof (struct KernelShellState));
