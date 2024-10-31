@@ -26,7 +26,7 @@ enum VgaColor
 uint16_t vga_color (enum VgaColor bg_color, enum VgaColor fg_color);
 void vga_init (void);
 void vga_set_color (enum VgaColor bg_color, enum VgaColor fg_color);
-void vga_clear_screen (void);
+void vga_clear_color (void);
 void vga_print (char c);
 void vga_scroll (uint32_t lines);
 void vga_reset (void);
