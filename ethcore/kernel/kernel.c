@@ -8,7 +8,7 @@
 #include "klib/kio.h"
 
 void
-main (void)
+kmain (void)
 {
   initGdt ();
   initIdt ();
