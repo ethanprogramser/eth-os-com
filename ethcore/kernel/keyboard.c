@@ -3,11 +3,22 @@
 #include "kernel/keycodes.h"
 #include "kernel/layout_mappings.h"
 #include "kernel/util.h"
+#include "klib/kdef.h"
 #include "klib/kmemory.h"
 
 #include "klib/kio.h"
 
-static enum Keycode current_key;
+#define __K_KEYBOARD_MAX_KEYCODES 0xFF
+
+struct KeyboardState
+{
+  enum Keycode keycodes[__K_KEYBOARD_MAX_KEYCODES];
+  size_t keycode_index;
+};
+
+static struct KeyboardState keyboard_state = { 0 };
+
+static void __keyboard_add_to_keycode_list (enum Keycode keycode);
 
 static bool printable_keycodes[0xFF] = {
   // 0x00 (reserved)
@@ -68,7 +79,7 @@ static bool printable_keycodes[0xFF] = {
 void
 keyboard_init (void)
 {
-  current_key = 0;
+  __kmemset (&keyboard_state, 0, sizeof (struct KeyboardState));
   irq_install_handler (1, keyboard_handler);
 }
 
@@ -78,13 +89,26 @@ keyboard_handler (struct InterruptRegisters *regs)
   enum Scancode scancode = inPortB (0x60) & 0x7F;
   bool pressed = (inPortB (0x60) & 0x80) == 0;
 
-  enum Keycode keycode = scancode_to_keycode (scancode, LAYOUT_MAPPING_QWERTY);
-
-  current_key = pressed ? keycode : 0;
+  if (pressed)
+  {
+    enum Keycode keycode
+        = scancode_to_keycode (scancode, LAYOUT_MAPPING_QWERTY);
+    __keyboard_add_to_keycode_list (keycode);
+  }
 }
 
-enum Keycode
-keyboard_get_key (void)
+void
+keyboard_for_each_key (void (*func) (enum Keycode, void *), void *data)
 {
-  return current_key;
+  for (size_t i = 0; i < keyboard_state.keycode_index; ++i)
+  {
+    func (keyboard_state.keycodes[i], data);
+    keyboard_state.keycodes[i] = 0;
+  }
+}
+
+static void
+__keyboard_add_to_keycode_list (enum Keycode keycode)
+{
+  keyboard_state.keycodes[keyboard_state.keycode_index++] = keycode;
 }
