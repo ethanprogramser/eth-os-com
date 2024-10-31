@@ -191,12 +191,20 @@ __kernel_shell_handle_key (enum Keycode keycode, void *data)
   {
     switch (keycode)
     {
+    case KEYCODE_CAPS:
+    {
+      state->caps = !state->caps;
+    }
+    break;
+
     default:
       break;
     }
   }
   else
   {
+    c = state->caps ? c ^ 0x20 : c;
+
     if (state->position < 0xFF)
     {
       state->line_text[state->position++] = c;
