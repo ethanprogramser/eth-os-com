@@ -16,5 +16,6 @@ int __kisxdigit (char c);
 
 char __ktoupper (char c);
 char __ktolower (char c);
+char __ktoggle (char c);
 
 #endif // __K_KLIB_CTYPE_H__

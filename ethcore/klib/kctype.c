@@ -256,3 +256,9 @@ __ktolower (char c)
 {
   return __kisalpha (c) > 0 ? c | 0x20 : c;
 }
+
+char
+__ktoggle (char c)
+{
+  return __kisalpha (c) > 0 ? c ^ 0x20 : c;
+}
