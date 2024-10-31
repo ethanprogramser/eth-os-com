@@ -8,8 +8,6 @@ struct InterruptRegisters;
 
 void keyboard_init (void);
 void keyboard_handler (struct InterruptRegisters *);
-bool keyboard_is_key_pressed (enum Keycode);
-bool keyboard_was_key_pressed (enum Keycode);
-enum Keycode keyboard_get_last_key (void);
+enum Keycode keyboard_get_key (void);
 
 #endif // __K_KEYBOARD_H__

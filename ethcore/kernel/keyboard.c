@@ -7,14 +7,7 @@
 
 #include "klib/kio.h"
 
-struct KeyboardState
-{
-  bool current_keys[0xFF];
-  bool previous_keys[0xFF];
-  enum Keycode last_keys[0x0F];
-};
-
-static struct KeyboardState keyboard_state = { 0 };
+static enum Keycode current_key;
 
 static bool printable_keycodes[0xFF] = {
   // 0x00 (reserved)
@@ -75,7 +68,7 @@ static bool printable_keycodes[0xFF] = {
 void
 keyboard_init (void)
 {
-  __kmemset (&keyboard_state, 0, sizeof (struct KeyboardState));
+  current_key = 0;
   irq_install_handler (1, keyboard_handler);
 }
 
@@ -87,25 +80,11 @@ keyboard_handler (struct InterruptRegisters *regs)
 
   enum Keycode keycode = scancode_to_keycode (scancode, LAYOUT_MAPPING_QWERTY);
 
-  __kmemcpy (keyboard_state.previous_keys, keyboard_state.current_keys, 0xFF);
-  keyboard_state.current_keys[keycode] = pressed;
-  keyboard_state.last_keys[0] = keycode;
-}
-
-bool
-keyboard_is_key_pressed (enum Keycode key)
-{
-  return keyboard_state.current_keys[key];
-}
-
-bool
-keyboard_was_key_pressed (enum Keycode key)
-{
-  return keyboard_state.previous_keys[key];
+  current_key = pressed ? keycode : 0;
 }
 
 enum Keycode
-keyboard_get_last_key (void)
+keyboard_get_key (void)
 {
-  return keyboard_state.last_keys[0];
+  return current_key;
 }
