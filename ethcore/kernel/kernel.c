@@ -8,14 +8,19 @@
 #include "klib/kio.h"
 
 void
-kmain (void)
+init_all(void)
 {
   initGdt ();
   initIdt ();
   initTimer ();
   vga_init ();
   keyboard_init ();
+}
 
+void
+kmain (void)
+{
+  init_all();
   __kputs ("Loading Eth-OS...\n");
 
   kernel_shell_init ();
