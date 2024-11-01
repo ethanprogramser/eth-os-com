@@ -67,6 +67,8 @@ vga_clear_screen (void)
 {
   __kmemset (vga_state.base, 0, vga_state.width * vga_state.height * 2);
   vga_clear_color ();
+  vga_state.column = 0;
+  vga_state.line = 0;
 }
 
 void
