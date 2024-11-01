@@ -142,6 +142,7 @@ void __kernel_shell_handle_event (struct KeyboardEvent *event, void *data);
 void
 kernel_shell_init (void)
 {
+  vga_reset ();
   vga_set_color (VGA_COLOR_BLACK, VGA_COLOR_WHITE);
   vga_clear_screen ();
 
