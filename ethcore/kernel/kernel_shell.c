@@ -256,6 +256,12 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
       else
       {
         __kputs ("\nYou have entered maximum of 255 characters.\n");
+
+        // FIXME: continue current command (after implementing proper memory
+        // allocation).
+        __kmemset (state->line_text, 0, 0xFF);
+        state->position = 0;
+        state->status = KERNEL_SHELL_STATUS_SUBMITTED;
       }
     }
   }
