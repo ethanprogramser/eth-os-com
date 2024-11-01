@@ -53,13 +53,20 @@ vga_set_color (enum VgaColor bg_color, enum VgaColor fg_color)
 }
 
 void
-vga_clear_screen (void)
+vga_clear_color (void)
 {
   for (uint8_t *vga_mem = (uint8_t *)vga_state.base;
        vga_mem < (uint8_t *)(vga_state.base
                              + (vga_state.width * vga_state.height * 2));
        vga_mem += 2)
     *(vga_mem + 1) = (uint8_t)(vga_state.color >> 8);
+}
+
+void
+vga_clear_screen (void)
+{
+  __kmemset (vga_state.base, 0, vga_state.width * vga_state.height * 2);
+  vga_clear_color ();
 }
 
 void
