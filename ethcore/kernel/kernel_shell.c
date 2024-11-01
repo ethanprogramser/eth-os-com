@@ -24,13 +24,13 @@ struct KernelShellState
 
 static struct KernelShellState kernel_shell_state = { 0 };
 
-static const char *prefix = "shell>";
+static const char *prefix = "ksh> ";
 
 static const char keycode_mapping_normal[0xFF]
     = { 0,
 
         // 0x01-0x04
-        '\b', ' ', '\t', 0,
+        0, ' ', 0, 0,
 
         // 0x05-0x0F
         '`', '-', '=', '\\', '[', ']', ';', '\'', ',', '.', '/',
@@ -85,7 +85,7 @@ static const char keycode_mapping_shifted[0xFF]
     = { 0,
 
         // 0x01-0x04
-        '\b', ' ', '\t', 0,
+        0, ' ', 0, 0,
 
         // 0x05-0x0F
         '~', '_', '+', '|', '{', '}', ':', '"', '<', '>', '?',
@@ -155,6 +155,8 @@ kernel_shell_loop (void)
   vga_enable_cursor ();
   kernel_shell_state.status = KERNEL_SHELL_STATUS_WAITING;
 
+  __kputs (prefix);
+
   while (kernel_shell_state.status != KERNEL_SHELL_STATUS_QUIT)
   {
     switch (kernel_shell_state.status)
@@ -168,6 +170,10 @@ kernel_shell_loop (void)
 
     case KERNEL_SHELL_STATUS_SUBMITTED:
     {
+      // TODO: implementation.
+
+      __kputs (prefix);
+      kernel_shell_state.status = KERNEL_SHELL_STATUS_WAITING;
     }
     break;
 
@@ -209,6 +215,23 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
       case KEYCODE_RSHIFT:
       {
         state->shifts_pressed++;
+      }
+      break;
+
+      case KEYCODE_BACKSPACE:
+      {
+        if (state->position > 0)
+        {
+          state->line_text[state->position--] = 0;
+          __kputc ('\b');
+        }
+      }
+      break;
+
+      case KEYCODE_RETURN:
+      {
+        __kputc ('\n');
+        state->status = KERNEL_SHELL_STATUS_SUBMITTED;
       }
       break;
 

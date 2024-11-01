@@ -89,13 +89,6 @@ vga_print (char c)
 
   case '\b':
   {
-    if (vga_state.column == 8)
-    {
-      vga_state.base[vga_state.line * vga_state.width + (++vga_state.column)]
-          = ' ' | vga_state.color;
-      vga_move_cursor (vga_state.column, vga_state.line);
-      break;
-    }
     if (vga_state.column == 0 && vga_state.line != 0)
     {
       vga_state.line--;
