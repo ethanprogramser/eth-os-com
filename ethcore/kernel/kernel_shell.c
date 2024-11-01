@@ -175,6 +175,10 @@ kernel_shell_loop (void)
 
       __kputs (prefix);
       kernel_shell_state.status = KERNEL_SHELL_STATUS_WAITING;
+
+      __kmemset (kernel_shell_state.line_text, 0,
+                 sizeof (kernel_shell_state.line_text));
+      kernel_shell_state.position = 0;
     }
     break;
 
