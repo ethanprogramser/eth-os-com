@@ -24,13 +24,13 @@ struct KernelShellState
 
 static struct KernelShellState kernel_shell_state = { 0 };
 
-static const char *prefix = "shell>";
+static const char *prefix = "ksh> ";
 
 static const char keycode_mapping_normal[0xFF]
     = { 0,
 
         // 0x01-0x04
-        '\b', ' ', '\t', 0,
+        0, ' ', 0, 0,
 
         // 0x05-0x0F
         '`', '-', '=', '\\', '[', ']', ';', '\'', ',', '.', '/',
@@ -85,7 +85,7 @@ static const char keycode_mapping_shifted[0xFF]
     = { 0,
 
         // 0x01-0x04
-        '\b', ' ', '\t', 0,
+        0, ' ', 0, 0,
 
         // 0x05-0x0F
         '~', '_', '+', '|', '{', '}', ':', '"', '<', '>', '?',
@@ -142,6 +142,7 @@ void __kernel_shell_handle_event (struct KeyboardEvent *event, void *data);
 void
 kernel_shell_init (void)
 {
+  vga_reset ();
   vga_set_color (VGA_COLOR_BLACK, VGA_COLOR_WHITE);
   vga_clear_screen ();
 
@@ -154,6 +155,8 @@ kernel_shell_loop (void)
 {
   vga_enable_cursor ();
   kernel_shell_state.status = KERNEL_SHELL_STATUS_WAITING;
+
+  __kputs (prefix);
 
   while (kernel_shell_state.status != KERNEL_SHELL_STATUS_QUIT)
   {
@@ -168,6 +171,14 @@ kernel_shell_loop (void)
 
     case KERNEL_SHELL_STATUS_SUBMITTED:
     {
+      // TODO: implementation.
+
+      __kputs (prefix);
+      kernel_shell_state.status = KERNEL_SHELL_STATUS_WAITING;
+
+      __kmemset (kernel_shell_state.line_text, 0,
+                 sizeof (kernel_shell_state.line_text));
+      kernel_shell_state.position = 0;
     }
     break;
 
@@ -212,6 +223,23 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
       }
       break;
 
+      case KEYCODE_BACKSPACE:
+      {
+        if (state->position > 0)
+        {
+          state->line_text[state->position--] = 0;
+          __kputc ('\b');
+        }
+      }
+      break;
+
+      case KEYCODE_RETURN:
+      {
+        __kputc ('\n');
+        state->status = KERNEL_SHELL_STATUS_SUBMITTED;
+      }
+      break;
+
       default:
         break;
       }
@@ -228,6 +256,12 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
       else
       {
         __kputs ("\nYou have entered maximum of 255 characters.\n");
+
+        // FIXME: continue current command (after implementing proper memory
+        // allocation).
+        __kmemset (state->line_text, 0, 0xFF);
+        state->position = 0;
+        state->status = KERNEL_SHELL_STATUS_SUBMITTED;
       }
     }
   }
