@@ -7,6 +7,8 @@ struct KernelShellCMD
   char *cmd;
 };
 
+void ksh_help (char *);
+void ksh_info (char *);
 void ksh_clear (char *);
 
 #endif // __K_KERNEL_SHELL_CMDS_H__
