@@ -1,4 +1,5 @@
 #include "kernel/kernel_shell.h"
+#include "kernel/kernel_shell_cmds.h"
 #include "kernel/keyboard.h"
 #include "kernel/keycodes.h"
 #include "kernel/vga.h"
@@ -26,6 +27,9 @@ struct KernelShellState
 static struct KernelShellState kernel_shell_state = { 0 };
 
 static const char *prefix = "ksh> ";
+
+struct KernelShellCMD cmds[0x7F]
+    = { (struct KernelShellCMD){ ksh_clear, "clear" } };
 
 static const char keycode_mapping_normal[0xFF]
     = { 0,
@@ -294,8 +298,9 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
 void
 __kernel_shell_handle_command (struct KernelShellState *state)
 {
-  if (__kstreq (state->line_text, "clear"))
+  for (size_t i = 0; i < 0x7F; ++i)
   {
-    vga_clear_screen ();
+    if (__kstreq (state->line_text, cmds[i].str))
+      cmds[i].cmd (state->line_text);
   }
 }
