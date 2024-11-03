@@ -301,10 +301,16 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
 void
 __kernel_shell_handle_command (struct KernelShellState *state)
 {
+  char trimmed[0xFF];
+  __kstrncpy (trimmed, state->line_text, 0xFF);
+  for (size_t i = 0; i < 0xFF && trimmed[i] != 0; ++i)
+    if (__kisspace (trimmed[i]))
+      trimmed[i] = 0;
+
   for (size_t i = 0; i < 0x7F; ++i)
   {
-    if (__kstrneq (state->line_text, cmds[i].cmd,
-                   __kstrnlen (cmds[i].cmd, 0xFF)))
+    size_t cmd_len = __kstrnlen (cmds[i].cmd, 0xFF);
+    if (__kstrneq (trimmed, cmds[i].cmd, cmd_len) && trimmed[cmd_len] == 0)
       cmds[i].func (state->line_text);
   }
 }
