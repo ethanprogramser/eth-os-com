@@ -30,7 +30,7 @@ char *__kstrsep (char **str, const char *delim);
 int __kstrcmp (const char *str1, const char *str2);
 #define __kstreq(str1, str2) (__kstrcmp ((str1), (str2)) == 0)
 int __kstrncmp (const char *str1, const char *str2, size_t n);
-#define __kstrneq(str1, str2) (__kstrncmp ((str1), (str2), (n)) == 0)
+#define __kstrneq(str1, str2, n) (__kstrncmp ((str1), (str2), (n)) == 0)
 int __kmemcmp (const void *blk1, const void *blk2, size_t n);
 void *__kmemcpy (void *dst, const void *src, size_t n);
 void *__kmemccpy (void *dst, const void *src, int c, size_t n);
