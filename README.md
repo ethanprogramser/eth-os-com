@@ -4,9 +4,9 @@
 <img src="./.github/imgs/os-screenshot.png" />
 
 ![Badge Workflow](https://github.com/ethanprogramser/eth-os-com/actions/workflows/ci.yml/badge.svg)
-![GitHub Repo stars](https://img.shields.io/github/stars/ethanprogramser/eth-os-com)
 ![Github Last Commit](https://img.shields.io/github/last-commit/ethanprogramser/eth-os-com)
-![Contributors](https://img.shields.io/github/contributors/ethanprogramser/eth-os-com)
+![Github Contributors](https://img.shields.io/github/contributors/ethanprogramser/eth-os-com)
+![GitHub Repo stars](https://img.shields.io/github/stars/ethanprogramser/eth-os-com)
 
 </div>
 
