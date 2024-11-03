@@ -305,9 +305,15 @@ __kernel_shell_handle_command (struct KernelShellState *state)
 {
   char trimmed[0xFF];
   __kstrncpy (trimmed, state->line_text, 0xFF);
-  for (size_t i = 0; i < 0xFF && trimmed[i] != 0; ++i)
+  for (size_t i = 0;
+       i < __kstrnlen (state->line_text, 0xFF) && trimmed[i] != 0; ++i)
+  {
     if (__kisspace (trimmed[i]))
+    {
       trimmed[i] = 0;
+      break;
+    }
+  }
 
   for (size_t i = 0; i < 0x7F; ++i)
   {
