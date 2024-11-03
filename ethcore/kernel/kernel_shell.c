@@ -303,7 +303,8 @@ __kernel_shell_handle_command (struct KernelShellState *state)
 {
   for (size_t i = 0; i < 0x7F; ++i)
   {
-    if (__kstreq (state->line_text, cmds[i].cmd))
+    if (__kstrneq (state->line_text, cmds[i].cmd,
+                   __kstrnlen (cmds[i].cmd, 0xFF)))
       cmds[i].func (state->line_text);
   }
 }
