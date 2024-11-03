@@ -186,6 +186,8 @@ void
 vga_move_cursor (uint8_t x, uint8_t y)
 {
   uint16_t pos = y * vga_state.width + x;
+  vga_state.column = x;
+  vga_state.line = y;
 
   outPortB (0x3D4, 0x0F);
   outPortB (0x3D5, (uint8_t)(pos & 0xFF));
