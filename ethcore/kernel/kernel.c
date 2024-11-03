@@ -2,13 +2,13 @@
 #include "kernel/idt.h"
 #include "kernel/kernel_shell.h"
 #include "kernel/keyboard.h"
+#include "kernel/multiboot.h"
 #include "kernel/timer.h"
 #include "kernel/vga.h"
-#include "klib/kint.h"
 #include "klib/kio.h"
 
 void
-kmain (void)
+kmain (size_t magic, struct MultibootInfo *boot)
 {
   initGdt ();
   initIdt ();
