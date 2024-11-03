@@ -5,7 +5,6 @@
 #include "kernel/vga.h"
 #include "klib/kctype.h"
 #include "klib/kio.h"
-#include "klib/kmemory.h"
 #include "klib/kstring.h"
 
 enum KernelShellStatus
