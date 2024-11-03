@@ -20,7 +20,7 @@ void
 ksh_info (char *_)
 {
   // OS name
-  __kputs ("=== OS INFORMATION ===:\n");
+  __kputs ("=== OS INFORMATION ===\n");
   char ver_major = __K_VERSION_MAJOR + '0';
   char ver_minor = __K_VERSION_MINOR + '0';
   char ver_patch = __K_VERSION_PATCH + '0';
