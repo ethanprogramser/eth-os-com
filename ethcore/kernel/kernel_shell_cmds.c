@@ -7,7 +7,8 @@ static const char *ksh_help_output
     = { "List of all available commands\n"
         "- help: Display this message\n"
         "- info: Display information about the OS\n"
-        "- clear: Clear screen\n\n" };
+        "- clear: Clear screen\n"
+        "\n" };
 
 void
 ksh_help (char *_)
