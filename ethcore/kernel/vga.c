@@ -5,7 +5,7 @@
 #define __K_DEFAULT_VGA_WIDTH 80
 #define __K_DEFAULT_VGA_HEIGHT 25
 
-#define __K_VGA_BASE 0x0B8000
+#define __K_VGA_BASE 0xC00B8000
 
 #define __K_VGA_DEFAULT_COLOR (VGA_COLOR_BLUE << 12) | (VGA_COLOR_WHITE << 8)
 
