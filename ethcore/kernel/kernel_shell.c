@@ -143,9 +143,11 @@ static const char keycode_mapping_shifted[0xFF]
         // 0x80-0x87
         0, 0, 0, 0, 0, 0, 0, 0 };
 
-char __kernel_shell_translate_keycode (enum Keycode keycode, bool shifted);
-void __kernel_shell_handle_event (struct KeyboardEvent *event, void *data);
-void __kernel_shell_handle_command (struct KernelShellState *state);
+static char __kernel_shell_translate_keycode (enum Keycode keycode,
+                                              bool shifted);
+static void __kernel_shell_handle_event (struct KeyboardEvent *event,
+                                         void *data);
+static void __kernel_shell_handle_command (struct KernelShellState *state);
 
 void
 kernel_shell_init (void)
@@ -197,14 +199,14 @@ kernel_shell_loop (void)
   }
 }
 
-char
+static char
 __kernel_shell_translate_keycode (enum Keycode keycode, bool shifted)
 {
   return shifted ? keycode_mapping_shifted[keycode]
                  : keycode_mapping_normal[keycode];
 }
 
-void
+static void
 __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
 {
   struct KernelShellState *state = (struct KernelShellState *)data;
@@ -298,7 +300,7 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
   }
 }
 
-void
+static void
 __kernel_shell_handle_command (struct KernelShellState *state)
 {
   char trimmed[0xFF];
