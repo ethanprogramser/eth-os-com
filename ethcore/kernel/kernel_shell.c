@@ -5,6 +5,7 @@
 #include "klib/kctype.h"
 #include "klib/kio.h"
 #include "klib/kmemory.h"
+#include "klib/kstring.h"
 
 enum KernelShellStatus
 {
@@ -138,6 +139,7 @@ static const char keycode_mapping_shifted[0xFF]
 
 char __kernel_shell_translate_keycode (enum Keycode keycode, bool shifted);
 void __kernel_shell_handle_event (struct KeyboardEvent *event, void *data);
+void __kernel_shell_handle_command (struct KernelShellState *state);
 
 void
 kernel_shell_init (void)
@@ -171,7 +173,7 @@ kernel_shell_loop (void)
 
     case KERNEL_SHELL_STATUS_SUBMITTED:
     {
-      // TODO: implementation.
+      __kernel_shell_handle_command (&kernel_shell_state);
 
       __kputs (prefix);
       kernel_shell_state.status = KERNEL_SHELL_STATUS_WAITING;
@@ -286,5 +288,14 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
 
   default:
     break;
+  }
+}
+
+void
+__kernel_shell_handle_command (struct KernelShellState *state)
+{
+  if (__kstreq (state->line_text, "clear"))
+  {
+    vga_clear_screen ();
   }
 }
