@@ -300,7 +300,7 @@ __kernel_shell_handle_command (struct KernelShellState *state)
 {
   for (size_t i = 0; i < 0x7F; ++i)
   {
-    if (__kstreq (state->line_text, cmds[i].str))
-      cmds[i].cmd (state->line_text);
+    if (__kstreq (state->line_text, cmds[i].cmd))
+      cmds[i].func (state->line_text);
   }
 }

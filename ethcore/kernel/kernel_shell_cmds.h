@@ -3,8 +3,8 @@
 
 struct KernelShellCMD
 {
-  void (*cmd) (char *);
-  char *str;
+  void (*func) (char *);
+  char *cmd;
 };
 
 void ksh_clear (char *);
