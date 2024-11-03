@@ -12,13 +12,13 @@ __kstrlen (const char *str)
 void
 __kstrcpy (char *dst, const char *src)
 {
-  for (; *src; src++, dst++)
-    *dst = *src;
+  for (; *src; *dst++ = *src++)
+    ;
 }
 
 void
 __kstrncpy (char *dst, const char *src, int n)
 {
-  for (int i = 0; i < n && src[i]; i++)
-    dst[i] = src[i];
+  for (; *src && n > 0; *dst++ = *src++, --n)
+    ;
 }
