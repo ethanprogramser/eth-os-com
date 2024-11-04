@@ -7,7 +7,7 @@ out_port_b (uint16_t Port, uint8_t Value)
   asm volatile ("outb %1, %0" : : "dN"(Port), "a"(Value));
 }
 
-char
+uint8_t
 in_port_b (uint16_t port)
 {
   char rv;

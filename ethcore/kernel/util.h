@@ -6,7 +6,7 @@
 #define __CEIL_DIV(a, b) ((((a) + (b)) - 1) / (b))
 
 void out_port_b (uint16_t Port, uint8_t Value);
-char in_port_b (uint16_t port);
+uint8_t in_port_b (uint16_t port);
 void out_port_w (uint16_t port, uint16_t value);
 uint16_t in_port_w (uint16_t port);
 
