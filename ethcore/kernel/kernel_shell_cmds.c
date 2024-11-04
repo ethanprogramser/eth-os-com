@@ -15,53 +15,26 @@ static const char *ksh_help_output
 void
 ksh_help (const char *args)
 {
-  if (__kstrnlen (args, 0xFF) > 0)
-  {
-    __kputs ("help: Unknown argument: ");
-    __kputs (args);
-    __kputs ("\nhelp cannot accept any arguments\n");
-  }
-  else
-  {
-    __kputs (ksh_help_output);
-  }
+  __kputs (ksh_help_output);
 }
 
 void
 ksh_info (const char *args)
 {
-  if (__kstrnlen (args, 0xFF) > 0)
-  {
-    __kputs ("info: Unknown argument: ");
-    __kputs (args);
-    __kputs ("\ninfo cannot accept any arguments\n");
-  }
-  else
-  {
-    __kputs (__K_KERNEL_NAME);
-    __kputc (' ');
+  __kputs (__K_KERNEL_NAME);
+  __kputc (' ');
 
-    __kputs (__K_KERNEL_VERSION);
-    __kputc (' ');
+  __kputs (__K_KERNEL_VERSION);
+  __kputc (' ');
 
-    __kputs (__K_ARCHITECTURE);
-    __kputc ('\n');
-  }
+  __kputs (__K_ARCHITECTURE);
+  __kputc ('\n');
 }
 
 void
 ksh_clear (const char *args)
 {
-  if (__kstrnlen (args, 0xFF) > 0)
-  {
-    __kputs ("clear: Unknown argument: ");
-    __kputs (args);
-    __kputs ("\nclear cannot accept any arguments\n");
-  }
-  else
-  {
-    vga_clear_screen ();
-  }
+  vga_clear_screen ();
 }
 
 void
