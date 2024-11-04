@@ -3,7 +3,6 @@
 
 struct InterruptRegisters;
 
-void initTimer ();
-void onIrq0 (struct InterruptRegisters *regs);
+void timer_init (void);
 
 #endif // __K_TIMER_H__

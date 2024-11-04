@@ -167,19 +167,19 @@ vga_reset (void)
 void
 vga_enable_cursor (void)
 {
-  outPortB (0x3D4, 0x0A);
-  outPortB (0x3D5, (inPortB (0x3D5) & 0xC0));
+  out_port_b (0x3D4, 0x0A);
+  out_port_b (0x3D5, (in_port_b (0x3D5) & 0xC0));
 
-  outPortB (0x3D4, 0x0B);
-  outPortB (0x3D5, (inPortB (0x3D5) & 0xE0) | (vga_state.width << 8)
-                       | vga_state.height);
+  out_port_b (0x3D4, 0x0B);
+  out_port_b (0x3D5, (in_port_b (0x3D5) & 0xE0) | (vga_state.width << 8)
+                         | vga_state.height);
 }
 
 void
 vga_disable_cursor (void)
 {
-  outPortB (0x3D4, 0x0A);
-  outPortB (0x3D5, 0x20);
+  out_port_b (0x3D4, 0x0A);
+  out_port_b (0x3D5, 0x20);
 }
 
 void
@@ -189,8 +189,8 @@ vga_move_cursor (uint8_t x, uint8_t y)
   vga_state.column = x;
   vga_state.line = y;
 
-  outPortB (0x3D4, 0x0F);
-  outPortB (0x3D5, (uint8_t)(pos & 0xFF));
-  outPortB (0x3D4, 0x0E);
-  outPortB (0x3D5, (uint8_t)((pos >> 8) & 0xFF));
+  out_port_b (0x3D4, 0x0F);
+  out_port_b (0x3D5, (uint8_t)(pos & 0xFF));
+  out_port_b (0x3D4, 0x0E);
+  out_port_b (0x3D5, (uint8_t)((pos >> 8) & 0xFF));
 }

@@ -1,37 +1,41 @@
 #include "kernel/gdt.h"
 #include "klib/kmemory.h"
 
-extern void gdt_flush (uint32_t);
-extern void tss_flush ();
+extern void gdt_flush (size_t);
+extern void tss_flush (void);
 
-struct gdt_entry_struct gdt_entries[6];
-struct gdt_ptr_struct gdt_ptr;
-struct tss_entry_struct tss_entry;
+struct GdtEntry gdt_entries[6];
+struct GdtPtr gdt_ptr;
+struct TssEntry tss_entry;
+
+void __tss_write (uint32_t num, uint16_t ss0, uint32_t esp0);
+void __gdt_set_gate (uint32_t num, size_t base, uint32_t limit, uint8_t access,
+                     uint8_t gran);
 
 void
-initGdt ()
+gdt_init (void)
 {
-  gdt_ptr.limit = (sizeof (struct gdt_entry_struct) * 6) - 1;
-  gdt_ptr.base = (uint32_t)&gdt_entries;
+  gdt_ptr.limit = (sizeof (struct GdtEntry) * 6) - 1;
+  gdt_ptr.base = (size_t)&gdt_entries;
 
-  setGdtGate (0, 0, 0, 0, 0);                // Null segment
-  setGdtGate (1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Kernel code segment
-  setGdtGate (2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Kernel data segment
-  setGdtGate (3, 0, 0xFFFFFFFF, 0xFA, 0xCF); // User code segment
-  setGdtGate (4, 0, 0xFFFFFFFF, 0xF2, 0xCF); // User data segment
-  writeTSS (5, 0x10, 0x0);
+  __gdt_set_gate (0, 0, 0, 0, 0);                // Null segment
+  __gdt_set_gate (1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Kernel code segment
+  __gdt_set_gate (2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Kernel data segment
+  __gdt_set_gate (3, 0, 0xFFFFFFFF, 0xFA, 0xCF); // User code segment
+  __gdt_set_gate (4, 0, 0xFFFFFFFF, 0xF2, 0xCF); // User data segment
+  __tss_write (5, 0x10, 0x0);
 
-  gdt_flush ((uint32_t)&gdt_ptr);
+  gdt_flush ((size_t)&gdt_ptr);
   tss_flush ();
 }
 
 void
-writeTSS (uint32_t num, uint16_t ss0, uint32_t esp0)
+__tss_write (uint32_t num, uint16_t ss0, uint32_t esp0)
 {
-  uint32_t base = (uint32_t)&tss_entry;
-  uint32_t limit = base + sizeof (tss_entry);
+  size_t base = (size_t)&tss_entry;
+  size_t limit = base + sizeof (tss_entry);
 
-  setGdtGate (num, base, limit, 0xE9, 0x00);
+  __gdt_set_gate (num, base, limit, 0xE9, 0x00);
   __kmemset (&tss_entry, 0, sizeof (tss_entry));
 
   tss_entry.ss0 = ss0;
@@ -43,8 +47,8 @@ writeTSS (uint32_t num, uint16_t ss0, uint32_t esp0)
 }
 
 void
-setGdtGate (uint32_t num, uint32_t base, uint32_t limit, uint8_t access,
-            uint8_t gran)
+__gdt_set_gate (uint32_t num, size_t base, uint32_t limit, uint8_t access,
+                uint8_t gran)
 {
 
   gdt_entries[num].base_low = (base & 0xFFFF);

@@ -10,9 +10,9 @@
 void
 kmain (size_t magic, struct MultibootInfo *boot)
 {
-  initGdt ();
-  initIdt ();
-  initTimer ();
+  gdt_init ();
+  idt_init ();
+  timer_init ();
   vga_init ();
   keyboard_init ();
 

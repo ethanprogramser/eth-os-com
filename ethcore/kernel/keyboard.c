@@ -30,7 +30,7 @@ keyboard_init (void)
 void
 keyboard_handler (struct InterruptRegisters *regs)
 {
-  uint8_t data = inPortB (0x60);
+  uint8_t data = in_port_b (0x60);
 
   enum Scancode scancode = data & 0x7F;
   enum KeyboardEventType type = (data & 0x80) == 0

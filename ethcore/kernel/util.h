@@ -3,8 +3,10 @@
 
 #include "klib/kint.h"
 
-void outPortB (uint16_t Port, uint8_t Value);
-char inPortB (uint16_t port);
+#define __K_CEIL_DIV(a, b) ((((a) + (b)) - 1) / (b))
+
+void out_port_b (uint16_t Port, uint8_t Value);
+char in_port_b (uint16_t port);
 
 struct InterruptRegisters
 {
