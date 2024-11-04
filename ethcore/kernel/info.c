@@ -9,6 +9,7 @@ static const char *__kcontributors[] = {
   "Nyvyme",
   "grenadieren",
   "asdasda3456",
+  "jamescraft10",
 };
 
 const char **
