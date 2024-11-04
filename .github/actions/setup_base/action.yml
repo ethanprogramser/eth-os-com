@@ -23,4 +23,4 @@ runs:
 
     - name: Mark directory as safe for git
       shell: bash
-      run: git config --global --add safe.directory /__w/eth-os-com/eth-os-com
+      run: git config --global --add safe.directory /__w/eth-os-com-ba-test/eth-os-com-ba-test
