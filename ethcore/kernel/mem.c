@@ -66,7 +66,7 @@ memory_init (size_t high, size_t phys_alloc_start)
 void
 __memory_pmm_init (size_t low, size_t high)
 {
-  memory_state.page_frame_min = __K_CEIL_DIV (low, 0x1000);
+  memory_state.page_frame_min = __CEIL_DIV (low, 0x1000);
   memory_state.page_frame_max = high / 0x1000;
   memory_state.total_alloc = 0;
 
