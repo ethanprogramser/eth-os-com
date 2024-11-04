@@ -17,7 +17,7 @@ enum KernelShellStatus
 struct KernelShellState
 {
   char line_text[0xFF];
-  uint8_t position;
+  size_t position;
   bool caps;
   uint8_t shifts_pressed;
   enum KernelShellStatus status;
@@ -269,11 +269,10 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
       {
         __kputs ("\nYou have entered maximum of 255 characters.\n");
 
-        // FIXME: continue current command (after implementing proper memory
-        // allocation).
-        __kmemset (state->line_text, 0, 0xFF);
-        state->position = 0;
-        state->status = KERNEL_SHELL_STATUS_SUBMITTED;
+        __kputs (prefix);
+        --state->position;
+        state->line_text[0xFE] = 0;
+        __kputs (state->line_text);
       }
     }
   }
