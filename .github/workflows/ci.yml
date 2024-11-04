@@ -20,3 +20,11 @@ jobs:
       - name: Build Eth-OS
         run: |
           make
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2.2.0
+        with:
+          name: ISO image
+          path: out/iso/ethos.iso
+          if-no-files-found: error
+          retention-days: 90
