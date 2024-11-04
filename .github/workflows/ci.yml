@@ -20,17 +20,17 @@ jobs:
       - name: Set variables
         shell: bash
         run: |
-          echo "sha_short=$(git rev-parse --short "$GITHUB_SHA")" >> "$GITHUB_ENV"
-          echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> "$GITHUB_ENV"
+          echo "sha_short=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_ENV
+          echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
 
       - name: Build Eth-OS
         run: |
           make
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@v4
         with:
-          name: ethos-${{ github.branch }}-${{ github.sha_short }}
+          name: ethos-${{ env.branch }}-${{ env.sha_short }}
           path: out/iso/ethos.iso
           if-no-files-found: error
           retention-days: 90
