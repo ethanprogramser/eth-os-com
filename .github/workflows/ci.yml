@@ -17,14 +17,19 @@ jobs:
       - name: Setup base
         uses: ./.github/actions/setup_base
 
+      - name: Set variables
+        run: |
+          echo "git_hash=$(git rev-parse --short \"$GITHUB_SHA\")" >> $GITHUB_ENV
+          echo "git_branch=${GITHUB_REF$refs/heads/}" >> $GITHUB_ENV
+
       - name: Build Eth-OS
         run: |
           make
 
-      - name: Upload Artifacts
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4.4.3
         with:
-          name: ethos-${{ github.ref }}-${{ github.sha }}
+          name: ethos-${{ github.git_branch }}-${{ github.git_hash }}
           path: out/iso/ethos.iso
           if-no-files-found: error
           retention-days: 90
