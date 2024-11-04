@@ -17,7 +17,7 @@ enum KernelShellStatus
 struct KernelShellState
 {
   char line_text[0xFF];
-  uint8_t position;
+  size_t position;
   bool caps;
   uint8_t shifts_pressed;
   enum KernelShellStatus status;
@@ -31,6 +31,7 @@ struct KernelShellCMD cmds[0x7F] = {
   (struct KernelShellCMD){ ksh_clear, "clear" },
   (struct KernelShellCMD){ ksh_help, "help" },
   (struct KernelShellCMD){ ksh_info, "info" },
+  (struct KernelShellCMD){ ksh_echo, "echo" },
 };
 
 static const char keycode_mapping_normal[0xFF]
@@ -268,11 +269,10 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
       {
         __kputs ("\nYou have entered maximum of 255 characters.\n");
 
-        // FIXME: continue current command (after implementing proper memory
-        // allocation).
-        __kmemset (state->line_text, 0, 0xFF);
-        state->position = 0;
-        state->status = KERNEL_SHELL_STATUS_SUBMITTED;
+        __kputs (prefix);
+        --state->position;
+        state->line_text[0xFE] = 0;
+        __kputs (state->line_text);
       }
     }
   }
@@ -319,6 +319,13 @@ __kernel_shell_handle_command (struct KernelShellState *state)
   {
     size_t cmd_len = __kstrnlen (cmds[i].cmd, 0xFF);
     if (__kstrneq (trimmed, cmds[i].cmd, cmd_len) && trimmed[cmd_len] == 0)
-      cmds[i].func (state->line_text);
+    {
+      cmds[i].func ((const char *)(trimmed + cmd_len + 1));
+      return;
+    }
   }
+
+  __kputs ("ksh: Unknown command: ");
+  __kputs (state->line_text);
+  __kputc ('\n');
 }
