@@ -150,6 +150,7 @@ static char __kernel_shell_translate_keycode (enum Keycode keycode,
 static void __kernel_shell_handle_event (struct KeyboardEvent *event,
                                          void *data);
 static void __kernel_shell_handle_command (struct KernelShellState *state);
+static void __kernel_shell_print_control_code (char c);
 
 void
 kernel_shell_init (void)
@@ -271,10 +272,15 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
     {
       if (state->wait_for_control_code)
       {
+        char control_code_output[3] = { 0 };
+        char c = __kernel_shell_translate_keycode (event->keycode, true);
+        c = __kisalpha (c) ? c : 0;
+
         switch (event->keycode)
         {
         case KEYCODE_L:
         {
+          __kernel_shell_print_control_code (c);
           ksh_clear (0);
           __kputs (prefix);
         }
@@ -282,6 +288,7 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
 
         case KEYCODE_C:
         {
+          __kernel_shell_print_control_code (c);
           state->status = KERNEL_SHELL_STATUS_SUBMITTED;
           __kmemset (state->line_text, 0, 0xFF);
           state->position = 0;
@@ -373,4 +380,16 @@ __kernel_shell_handle_command (struct KernelShellState *state)
   __kputs ("ksh: Unknown command: ");
   __kputs (state->line_text);
   __kputc ('\n');
+}
+
+static void
+__kernel_shell_print_control_code (char c)
+{
+  if (c > 0)
+  {
+    vga_set_color (VGA_COLOR_BLACK, VGA_COLOR_DGREY);
+    __kputc ('^');
+    __kputc (c);
+    vga_set_color (VGA_COLOR_BLACK, VGA_COLOR_WHITE);
+  }
 }
