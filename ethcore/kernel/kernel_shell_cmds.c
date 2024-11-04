@@ -2,6 +2,7 @@
 #include "kernel/info.h"
 #include "kernel/vga.h"
 #include "klib/kio.h"
+#include "klib/kstring.h"
 
 static const char *ksh_help_output
     = { "List of all available commands\n"
@@ -18,45 +19,31 @@ ksh_help (const char *_)
 }
 
 void
-ksh_info (const char *_)
+ksh_info (const char *args)
 {
-  // OS name
-  __kputs ("=== OS INFORMATION ===\n");
-  char ver_major = __K_VERSION_MAJOR + '0';
-  char ver_minor = __K_VERSION_MINOR + '0';
-  char ver_patch = __K_VERSION_PATCH + '0';
-  char version[0xFF] = { ver_major, '.', ver_minor, '.', ver_patch, 0 };
-  __kputs ("OS name: ");
-  __kputs (__K_NAME "\n");
-  __kputs ("Version: ");
-  __kputs (version);
-  __kputc ('\n');
-  __kputs ("Architecture: " __K_ARCHITECTURE);
-  __kputs ("\n\n");
-
-  // Maintainers
-  __kputs ("=== MAINTAINERS ===\n");
-  size_t maintainers_list_len;
-  const char **maintainers_list
-      = __kinfo_get_maintainers (&maintainers_list_len);
-  for (size_t i = 0; i < maintainers_list_len; ++i)
+  if (__kstrnlen (args, 0xFF) > 0)
   {
-    __kputs (maintainers_list[i]);
+    __kputs ("info: Unknown argument: ");
+    __kputs (args);
+    __kputs ("\ninfo cannot accept any arguments\n");
+  }
+  else
+  {
+    __kputs (__K_KERNEL_NAME);
+    __kputc (' ');
+
+    __kputs (__K_KERNEL_VERSION);
+    __kputc (' ');
+
+    __kputs (__K_OS_NAME);
+    __kputc (' ');
+
+    __kputs (__K_OS_VERSION);
+    __kputc (' ');
+
+    __kputs (__K_ARCHITECTURE);
     __kputc ('\n');
   }
-  __kputc ('\n');
-
-  // Contributors
-  __kputs ("=== CONTRIBUTORS ===\n");
-  size_t contributors_list_len;
-  const char **contributors_list
-      = __kinfo_get_contributors (&contributors_list_len);
-  for (size_t i = 0; i < contributors_list_len; ++i)
-  {
-    __kputs (contributors_list[i]);
-    __kputc ('\n');
-  }
-  __kputc ('\n');
 }
 
 void
