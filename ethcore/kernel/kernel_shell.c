@@ -21,6 +21,7 @@ struct KernelShellState
   bool caps;
   uint8_t shifts_pressed;
   enum KernelShellStatus status;
+  bool wait_for_control_code;
 };
 
 static struct KernelShellState kernel_shell_state = { 0 };
@@ -255,27 +256,61 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
       }
       break;
 
+      case KEYCODE_LCONTROL:
+      case KEYCODE_RCONTROL:
+      {
+        state->wait_for_control_code = true;
+      }
+      break;
+
       default:
         break;
       }
     }
     else
     {
-      c = state->caps ? __ktoggle (c) : c;
-
-      if (state->position < 0xFF)
+      if (state->wait_for_control_code)
       {
-        state->line_text[state->position++] = c;
-        __kputc (c);
+        switch (event->keycode)
+        {
+        case KEYCODE_L:
+        {
+          ksh_clear (0);
+          __kputs (prefix);
+        }
+        break;
+
+        case KEYCODE_C:
+        {
+          state->status = KERNEL_SHELL_STATUS_SUBMITTED;
+          __kmemset (state->line_text, 0, 0xFF);
+          state->position = 0;
+          __kputc ('\n');
+        }
+        break;
+
+        default:
+          break;
+        }
       }
       else
       {
-        __kputs ("\nYou have entered maximum of 255 characters.\n");
+        c = state->caps ? __ktoggle (c) : c;
 
-        __kputs (prefix);
-        --state->position;
-        state->line_text[0xFE] = 0;
-        __kputs (state->line_text);
+        if (state->position < 0xFF)
+        {
+          state->line_text[state->position++] = c;
+          __kputc (c);
+        }
+        else
+        {
+          __kputs ("\nYou have entered maximum of 255 characters.\n");
+
+          __kputs (prefix);
+          --state->position;
+          state->line_text[0xFE] = 0;
+          __kputs (state->line_text);
+        }
       }
     }
   }
@@ -289,6 +324,13 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
     case KEYCODE_RSHIFT:
     {
       state->shifts_pressed--;
+    }
+    break;
+
+    case KEYCODE_LCONTROL:
+    case KEYCODE_RCONTROL:
+    {
+      state->wait_for_control_code = false;
     }
     break;
 
