@@ -31,6 +31,7 @@ struct KernelShellCMD cmds[0x7F] = {
   (struct KernelShellCMD){ ksh_clear, "clear" },
   (struct KernelShellCMD){ ksh_help, "help" },
   (struct KernelShellCMD){ ksh_info, "info" },
+  (struct KernelShellCMD){ ksh_echo, "echo" },
 };
 
 static const char keycode_mapping_normal[0xFF]
@@ -319,6 +320,13 @@ __kernel_shell_handle_command (struct KernelShellState *state)
   {
     size_t cmd_len = __kstrnlen (cmds[i].cmd, 0xFF);
     if (__kstrneq (trimmed, cmds[i].cmd, cmd_len) && trimmed[cmd_len] == 0)
-      cmds[i].func (state->line_text);
+    {
+      cmds[i].func ((const char *)(trimmed + cmd_len + 1));
+      return;
+    }
   }
+
+  __kputs ("ksh: Unknown command: ");
+  __kputs (state->line_text);
+  __kputc ('\n');
 }

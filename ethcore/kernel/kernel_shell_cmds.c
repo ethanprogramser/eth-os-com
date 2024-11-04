@@ -8,16 +8,17 @@ static const char *ksh_help_output
         "- help: Display this message\n"
         "- info: Display information about the OS\n"
         "- clear: Clear screen\n"
+        "- echo: Output string to the screen\n"
         "\n" };
 
 void
-ksh_help (char *_)
+ksh_help (const char *_)
 {
   __kputs (ksh_help_output);
 }
 
 void
-ksh_info (char *_)
+ksh_info (const char *_)
 {
   // OS name
   __kputs ("=== OS INFORMATION ===\n");
@@ -59,7 +60,14 @@ ksh_info (char *_)
 }
 
 void
-ksh_clear (char *_)
+ksh_clear (const char *_)
 {
   vga_clear_screen ();
+}
+
+void
+ksh_echo (const char *text)
+{
+  __kputs (text);
+  __kputc ('\n');
 }
