@@ -183,7 +183,10 @@ kernel_shell_loop (void)
     case KERNEL_SHELL_STATUS_SUBMITTED:
     {
       if ((uint8_t)kernel_shell_state.line_text[0] > 0)
+      {
+        // TODO: Add command to the command buffer.
         __kernel_shell_handle_command (&kernel_shell_state);
+      }
 
       __kputs (prefix);
       kernel_shell_state.status = KERNEL_SHELL_STATUS_WAITING;
