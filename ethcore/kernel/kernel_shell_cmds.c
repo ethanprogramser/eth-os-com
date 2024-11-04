@@ -7,7 +7,7 @@
 static const char *ksh_help_output
     = { "List of all available commands\n"
         "* help -- Display this message\n"
-        "* info -- Display information about the OS\n"
+        "* info -- Display information about the kernel\n"
         "* clear -- Clear screen\n"
         "* echo [string] -- Output string to the screen\n"
         "\n" };
@@ -42,12 +42,6 @@ ksh_info (const char *args)
     __kputc (' ');
 
     __kputs (__K_KERNEL_VERSION);
-    __kputc (' ');
-
-    __kputs (__K_OS_NAME);
-    __kputc (' ');
-
-    __kputs (__K_OS_VERSION);
     __kputc (' ');
 
     __kputs (__K_ARCHITECTURE);
