@@ -1,34 +1,34 @@
 global idt_flush
 idt_flush:
-    MOV eax, [esp+4]
-    LIDT [eax]
-    STI
-    RET
+    mov eax, [esp+4]
+    lidt [eax]
+    sti
+    ret
 
 %macro ISR_NOERRCODE 1
     global isr%1
     isr%1:
-        CLI
-        PUSH LONG 0
-        PUSH LONG %1
-        JMP isr_common_stub
+        cli
+        push long 0
+        push long %1
+        jmp isr_common_stub
 %endmacro
 
 %macro ISR_ERRCODE 1
     global isr%1
     isr%1:
-        CLI
-        PUSH LONG %1
-        JMP isr_common_stub
+        cli
+        push long %1
+        jmp isr_common_stub
 %endmacro
 
 %macro IRQ 2
     global irq%1
     irq%1:
-        CLI
-        PUSH LONG 0
-        PUSH LONG %2
-        JMP irq_common_stub
+        cli
+        push long 0
+        push long %2
+        jmp irq_common_stub
 %endmacro
 
 ISR_NOERRCODE 0
@@ -88,56 +88,56 @@ extern isr_handler
 isr_common_stub:
     pusha
     mov eax,ds
-    PUSH eax
-    MOV eax, cr2
-    PUSH eax
+    push eax
+    mov eax, cr2
+    push eax
 
-    MOV ax, 0x10
-    MOV ds, ax
-    MOV es, ax
-    MOV fs, ax
-    MOV gs, ax
+    mov ax, 0x10
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
 
-    PUSH esp
-    CALL isr_handler
+    push esp
+    call isr_handler
 
-    ADD esp, 8
-    POP ebx
-    MOV ds, bx
-    MOV es, bx
-    MOV fs, bx
-    MOV gs, bx
+    add esp, 8
+    pop ebx
+    mov ds, bx
+    mov es, bx
+    mov fs, bx
+    mov gs, bx
 
-    POPA
-    ADD esp, 8
-    STI
-    IRET
+    popa
+    add esp, 8
+    sti
+    iret
 
 extern irq_handler
 irq_common_stub:
     pusha
     mov eax,ds
-    PUSH eax
-    MOV eax, cr2
-    PUSH eax
+    push eax
+    mov eax, cr2
+    push eax
 
-    MOV ax, 0x10
-    MOV ds, ax
-    MOV es, ax
-    MOV fs, ax
-    MOV gs, ax
+    mov ax, 0x10
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
 
-    PUSH esp
-    CALL irq_handler
+    push esp
+    call irq_handler
 
-    ADD esp, 8
-    POP ebx
-    MOV ds, bx
-    MOV es, bx
-    MOV fs, bx
-    MOV gs, bx
+    add esp, 8
+    pop ebx
+    mov ds, bx
+    mov es, bx
+    mov fs, bx
+    mov gs, bx
 
-    POPA
-    ADD esp, 8
-    STI
-    IRET
+    popa
+    add esp, 8
+    sti
+    iret

@@ -1,10 +1,14 @@
 # Eth-OS Community Edition
+<div align="center">
+
 <img src="./.github/imgs/os-screenshot.png" />
 
+![Badge Workflow](https://github.com/ethanprogramser/eth-os-com/actions/workflows/ci.yml/badge.svg)
 ![Github Last Commit](https://img.shields.io/github/last-commit/ethanprogramser/eth-os-com)
-![Contributors](https://img.shields.io/github/contributors/ethanprogramser/eth-os-com)
-![Discord](https://img.shields.io/discord/1272409122746400788)
+![Github Contributors](https://img.shields.io/github/contributors/ethanprogramser/eth-os-com)
+![GitHub Repo stars](https://img.shields.io/github/stars/ethanprogramser/eth-os-com)
 
+</div>
 
 Community driven 32-bit OS based on
 [Eth-OS](https://github.com/ethanprogramser/eth-os).

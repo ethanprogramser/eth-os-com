@@ -1,11 +1,12 @@
 #ifndef __K_IDT_H__
 #define __K_IDT_H__
 
+#include "klib/kdef.h"
 #include "klib/kint.h"
 
 struct InterruptRegisters;
 
-struct idt_entry_struct
+struct IdtEntry
 {
   uint16_t base_low;
   uint16_t sel;
@@ -14,70 +15,70 @@ struct idt_entry_struct
   uint16_t base_high;
 } __attribute__ ((packed));
 
-struct idt_ptr_struct
+struct IdtPtr
 {
   uint16_t limit;
-  uint32_t base;
+  size_t base;
 } __attribute__ ((packed));
 
-void initIdt ();
-void setIdtGate (uint8_t num, uint32_t base, uint16_t sel, uint8_t flags);
+void idt_init (void);
 
 void isr_handler (struct InterruptRegisters *regs);
 void irq_install_handler (int irq,
                           void (*handler) (struct InterruptRegisters *r));
+void irq_uninstall_handler (int irq);
 
-extern void isr0 ();
-extern void isr1 ();
-extern void isr2 ();
-extern void isr3 ();
-extern void isr4 ();
-extern void isr5 ();
-extern void isr6 ();
-extern void isr7 ();
-extern void isr8 ();
-extern void isr9 ();
-extern void isr10 ();
-extern void isr11 ();
-extern void isr12 ();
-extern void isr13 ();
-extern void isr14 ();
-extern void isr15 ();
-extern void isr16 ();
-extern void isr17 ();
-extern void isr18 ();
-extern void isr19 ();
-extern void isr20 ();
-extern void isr21 ();
-extern void isr22 ();
-extern void isr23 ();
-extern void isr24 ();
-extern void isr25 ();
-extern void isr26 ();
-extern void isr27 ();
-extern void isr28 ();
-extern void isr29 ();
-extern void isr30 ();
-extern void isr31 ();
+extern void isr0 (void);
+extern void isr1 (void);
+extern void isr2 (void);
+extern void isr3 (void);
+extern void isr4 (void);
+extern void isr5 (void);
+extern void isr6 (void);
+extern void isr7 (void);
+extern void isr8 (void);
+extern void isr9 (void);
+extern void isr10 (void);
+extern void isr11 (void);
+extern void isr12 (void);
+extern void isr13 (void);
+extern void isr14 (void);
+extern void isr15 (void);
+extern void isr16 (void);
+extern void isr17 (void);
+extern void isr18 (void);
+extern void isr19 (void);
+extern void isr20 (void);
+extern void isr21 (void);
+extern void isr22 (void);
+extern void isr23 (void);
+extern void isr24 (void);
+extern void isr25 (void);
+extern void isr26 (void);
+extern void isr27 (void);
+extern void isr28 (void);
+extern void isr29 (void);
+extern void isr30 (void);
+extern void isr31 (void);
 
-extern void isr128 ();
-extern void isr177 ();
+extern void isr128 (void);
+extern void isr177 (void);
 
-extern void irq0 ();
-extern void irq1 ();
-extern void irq2 ();
-extern void irq3 ();
-extern void irq4 ();
-extern void irq5 ();
-extern void irq6 ();
-extern void irq7 ();
-extern void irq8 ();
-extern void irq9 ();
-extern void irq10 ();
-extern void irq11 ();
-extern void irq12 ();
-extern void irq13 ();
-extern void irq14 ();
-extern void irq15 ();
+extern void irq0 (void);
+extern void irq1 (void);
+extern void irq2 (void);
+extern void irq3 (void);
+extern void irq4 (void);
+extern void irq5 (void);
+extern void irq6 (void);
+extern void irq7 (void);
+extern void irq8 (void);
+extern void irq9 (void);
+extern void irq10 (void);
+extern void irq11 (void);
+extern void irq12 (void);
+extern void irq13 (void);
+extern void irq14 (void);
+extern void irq15 (void);
 
 #endif // __K_IDT_H__

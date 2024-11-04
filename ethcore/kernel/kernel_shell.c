@@ -1,10 +1,11 @@
 #include "kernel/kernel_shell.h"
+#include "kernel/kernel_shell_cmds.h"
 #include "kernel/keyboard.h"
 #include "kernel/keycodes.h"
 #include "kernel/vga.h"
 #include "klib/kctype.h"
 #include "klib/kio.h"
-#include "klib/kmemory.h"
+#include "klib/kstring.h"
 
 enum KernelShellStatus
 {
@@ -25,6 +26,12 @@ struct KernelShellState
 static struct KernelShellState kernel_shell_state = { 0 };
 
 static const char *prefix = "ksh> ";
+
+struct KernelShellCMD cmds[0x7F] = {
+  (struct KernelShellCMD){ ksh_clear, "clear" },
+  (struct KernelShellCMD){ ksh_help, "help" },
+  (struct KernelShellCMD){ ksh_info, "info" },
+};
 
 static const char keycode_mapping_normal[0xFF]
     = { 0,
@@ -136,8 +143,11 @@ static const char keycode_mapping_shifted[0xFF]
         // 0x80-0x87
         0, 0, 0, 0, 0, 0, 0, 0 };
 
-char __kernel_shell_translate_keycode (enum Keycode keycode, bool shifted);
-void __kernel_shell_handle_event (struct KeyboardEvent *event, void *data);
+static char __kernel_shell_translate_keycode (enum Keycode keycode,
+                                              bool shifted);
+static void __kernel_shell_handle_event (struct KeyboardEvent *event,
+                                         void *data);
+static void __kernel_shell_handle_command (struct KernelShellState *state);
 
 void
 kernel_shell_init (void)
@@ -146,7 +156,7 @@ kernel_shell_init (void)
   vga_set_color (VGA_COLOR_BLACK, VGA_COLOR_WHITE);
   vga_clear_screen ();
 
-  __kputs ("Welcome to Kernel Shell.\n\n");
+  __kputs ("Welcome to Eth-OS Kernel Shell.\n\n");
   __kmemset (&kernel_shell_state, 0, sizeof (struct KernelShellState));
 }
 
@@ -171,7 +181,8 @@ kernel_shell_loop (void)
 
     case KERNEL_SHELL_STATUS_SUBMITTED:
     {
-      // TODO: implementation.
+      if ((uint8_t)kernel_shell_state.line_text[0] > 0)
+        __kernel_shell_handle_command (&kernel_shell_state);
 
       __kputs (prefix);
       kernel_shell_state.status = KERNEL_SHELL_STATUS_WAITING;
@@ -188,14 +199,14 @@ kernel_shell_loop (void)
   }
 }
 
-char
+static char
 __kernel_shell_translate_keycode (enum Keycode keycode, bool shifted)
 {
   return shifted ? keycode_mapping_shifted[keycode]
                  : keycode_mapping_normal[keycode];
 }
 
-void
+static void
 __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
 {
   struct KernelShellState *state = (struct KernelShellState *)data;
@@ -286,5 +297,28 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
 
   default:
     break;
+  }
+}
+
+static void
+__kernel_shell_handle_command (struct KernelShellState *state)
+{
+  char trimmed[0xFF];
+  __kstrncpy (trimmed, state->line_text, 0xFF);
+  for (size_t i = 0;
+       i < __kstrnlen (state->line_text, 0xFF) && trimmed[i] != 0; ++i)
+  {
+    if (__kisspace (trimmed[i]))
+    {
+      trimmed[i] = 0;
+      break;
+    }
+  }
+
+  for (size_t i = 0; i < 0x7F; ++i)
+  {
+    size_t cmd_len = __kstrnlen (cmds[i].cmd, 0xFF);
+    if (__kstrneq (trimmed, cmds[i].cmd, cmd_len) && trimmed[cmd_len] == 0)
+      cmds[i].func (state->line_text);
   }
 }
