@@ -13,9 +13,18 @@ static const char *ksh_help_output
         "\n" };
 
 void
-ksh_help (const char *_)
+ksh_help (const char *args)
 {
-  __kputs (ksh_help_output);
+  if (__kstrnlen (args, 0xFF) > 0)
+  {
+    __kputs ("help: Unknown argument: ");
+    __kputs (args);
+    __kputs ("\nhelp cannot accept any arguments\n");
+  }
+  else
+  {
+    __kputs (ksh_help_output);
+  }
 }
 
 void
@@ -47,9 +56,18 @@ ksh_info (const char *args)
 }
 
 void
-ksh_clear (const char *_)
+ksh_clear (const char *args)
 {
-  vga_clear_screen ();
+  if (__kstrnlen (args, 0xFF) > 0)
+  {
+    __kputs ("clear: Unknown argument: ");
+    __kputs (args);
+    __kputs ("\nclear cannot accept any arguments\n");
+  }
+  else
+  {
+    vga_clear_screen ();
+  }
 }
 
 void
