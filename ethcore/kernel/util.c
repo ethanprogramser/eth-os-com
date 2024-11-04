@@ -15,22 +15,16 @@ in_port_b (uint16_t port)
   return rv;
 }
 
-void 
-outPortW(uint16_t port, uint16_t value) {
-    __asm__ volatile (
-        "outw %0, %1"
-        :
-        : "a"(value), "Nd"(port)
-    );
+void
+out_port_w (uint16_t port, uint16_t value)
+{
+  __asm__ volatile ("outw %0, %1" : : "a"(value), "Nd"(port));
 }
 
 uint16_t
-inPortW(uint16_t port) {
-    uint16_t ret;
-      __asm__ volatile (
-          "inw %1, %0"
-          : "=a"(ret)
-          : "Nd"(port)
-      );
-    return ret;
+in_port_w (uint16_t port)
+{
+  uint16_t ret;
+  __asm__ volatile ("inw %1, %0" : "=a"(ret) : "Nd"(port));
+  return ret;
 }
