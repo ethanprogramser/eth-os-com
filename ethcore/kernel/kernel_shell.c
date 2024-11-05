@@ -21,6 +21,7 @@ struct KernelShellState
   bool caps;
   uint8_t shifts_pressed;
   enum KernelShellStatus status;
+  bool wait_for_control_code;
 };
 
 static struct KernelShellState kernel_shell_state = { 0 };
@@ -149,6 +150,7 @@ static char __kernel_shell_translate_keycode (enum Keycode keycode,
 static void __kernel_shell_handle_event (struct KeyboardEvent *event,
                                          void *data);
 static void __kernel_shell_handle_command (struct KernelShellState *state);
+static void __kernel_shell_print_control_code (char c);
 
 void
 kernel_shell_init (void)
@@ -183,7 +185,10 @@ kernel_shell_loop (void)
     case KERNEL_SHELL_STATUS_SUBMITTED:
     {
       if ((uint8_t)kernel_shell_state.line_text[0] > 0)
+      {
+        // TODO: Add command to the command buffer.
         __kernel_shell_handle_command (&kernel_shell_state);
+      }
 
       __kputs (prefix);
       kernel_shell_state.status = KERNEL_SHELL_STATUS_WAITING;
@@ -252,27 +257,67 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
       }
       break;
 
+      case KEYCODE_LCONTROL:
+      case KEYCODE_RCONTROL:
+      {
+        state->wait_for_control_code = true;
+      }
+      break;
+
       default:
         break;
       }
     }
     else
     {
-      c = state->caps ? __ktoggle (c) : c;
-
-      if (state->position < 0xFF)
+      if (state->wait_for_control_code)
       {
-        state->line_text[state->position++] = c;
-        __kputc (c);
+        char control_code_output[3] = { 0 };
+        char c = __kernel_shell_translate_keycode (event->keycode, true);
+        c = __kisalpha (c) ? c : 0;
+
+        switch (event->keycode)
+        {
+        case KEYCODE_L:
+        {
+          __kernel_shell_print_control_code (c);
+          ksh_clear (0);
+          __kputs (prefix);
+        }
+        break;
+
+        case KEYCODE_C:
+        {
+          __kernel_shell_print_control_code (c);
+          state->status = KERNEL_SHELL_STATUS_SUBMITTED;
+          __kmemset (state->line_text, 0, 0xFF);
+          state->position = 0;
+          __kputc ('\n');
+        }
+        break;
+
+        default:
+          break;
+        }
       }
       else
       {
-        __kputs ("\nYou have entered maximum of 255 characters.\n");
+        c = state->caps ? __ktoggle (c) : c;
 
-        __kputs (prefix);
-        --state->position;
-        state->line_text[0xFE] = 0;
-        __kputs (state->line_text);
+        if (state->position < 0xFF)
+        {
+          state->line_text[state->position++] = c;
+          __kputc (c);
+        }
+        else
+        {
+          __kputs ("\nYou have entered maximum of 255 characters.\n");
+
+          __kputs (prefix);
+          --state->position;
+          state->line_text[0xFE] = 0;
+          __kputs (state->line_text);
+        }
       }
     }
   }
@@ -286,6 +331,13 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
     case KEYCODE_RSHIFT:
     {
       state->shifts_pressed--;
+    }
+    break;
+
+    case KEYCODE_LCONTROL:
+    case KEYCODE_RCONTROL:
+    {
+      state->wait_for_control_code = false;
     }
     break;
 
@@ -328,4 +380,16 @@ __kernel_shell_handle_command (struct KernelShellState *state)
   __kputs ("ksh: Unknown command: ");
   __kputs (state->line_text);
   __kputc ('\n');
+}
+
+static void
+__kernel_shell_print_control_code (char c)
+{
+  if (c > 0)
+  {
+    vga_set_color (VGA_COLOR_BLACK, VGA_COLOR_DGREY);
+    __kputc ('^');
+    __kputc (c);
+    vga_set_color (VGA_COLOR_BLACK, VGA_COLOR_WHITE);
+  }
 }
