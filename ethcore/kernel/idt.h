@@ -21,11 +21,12 @@ struct IdtPtr
   size_t base;
 } __attribute__ ((packed));
 
+typedef void (*IrqHandler) (struct InterruptRegisters *);
+
 void idt_init (void);
 
 void isr_handler (struct InterruptRegisters *regs);
-void irq_install_handler (int irq,
-                          void (*handler) (struct InterruptRegisters *r));
+void irq_install_handler (int irq, IrqHandler handler);
 void irq_uninstall_handler (int irq);
 
 extern void isr0 (void);

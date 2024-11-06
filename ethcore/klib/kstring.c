@@ -7,9 +7,9 @@ size_t
 __kstrspn (const char *str, const char *accept)
 {
   const char *p = str;
+  char c, ac;
 cont:
-  char c = *p++;
-  char ac;
+  c = *p++;
   for (const char *ap = accept; (ac = *ap++) != '\0';)
   {
     if (ac == c)

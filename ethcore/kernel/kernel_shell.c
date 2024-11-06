@@ -28,11 +28,11 @@ static struct KernelShellState kernel_shell_state = { 0 };
 
 static const char *prefix = "ksh> ";
 
-struct KernelShellCMD cmds[0x7F] = {
-  (struct KernelShellCMD){ ksh_clear, "clear" },
-  (struct KernelShellCMD){ ksh_help, "help" },
-  (struct KernelShellCMD){ ksh_info, "info" },
-  (struct KernelShellCMD){ ksh_echo, "echo" },
+static const struct KernelShellCMD cmds[0x7F] = {
+  { ksh_clear, "clear" },
+  { ksh_help, "help" },
+  { ksh_info, "info" },
+  { ksh_echo, "echo" },
 };
 
 static const char keycode_mapping_normal[0xFF]

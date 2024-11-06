@@ -4,27 +4,27 @@
 void
 out_port_b (uint16_t Port, uint8_t Value)
 {
-  asm volatile ("outb %1, %0" : : "dN"(Port), "a"(Value));
+  __asm__ ("outb %1, %0\n" : : "dN"(Port), "a"(Value));
 }
 
 uint8_t
 in_port_b (uint16_t port)
 {
   char rv;
-  asm volatile ("inb %1, %0" : "=a"(rv) : "dN"(port));
+  __asm__ ("inb %1, %0\n" : "=a"(rv) : "dN"(port));
   return rv;
 }
 
 void
 out_port_w (uint16_t port, uint16_t value)
 {
-  __asm__ volatile ("outw %0, %1" : : "a"(value), "Nd"(port));
+  __asm__ ("outw %0, %1\n" : : "a"(value), "Nd"(port));
 }
 
 uint16_t
 in_port_w (uint16_t port)
 {
   uint16_t ret;
-  __asm__ volatile ("inw %1, %0" : "=a"(ret) : "Nd"(port));
+  __asm__ ("inw %1, %0\n" : "=a"(ret) : "Nd"(port));
   return ret;
 }
