@@ -15,22 +15,22 @@ Eth-OS Community Edition is a community-driven 32-bit operating system based on 
 
 ## Features and Roadmap
 ### Implemented
-- ✅ Boot process
-- ✅ VGA driver
-- ✅ GDT (Global Descriptor Table)
-- ✅ Interrupts
-- ✅ Timer
-- ✅ Basic keyboard driver
+- Boot process
+- VGA driver
+- GDT (Global Descriptor Table)
+- Interrupts
+- Timer
+- Basic keyboard driver
 
 ### In Development
-- 🚧 Shell
-- 🚧 Filesystem
-- 🚧 Standard library
+- Shell
+- Filesystem
+- Standard library
 
 ### Planned
-- 📋 Basic GUI library
-- 📋 Window manager
-- 📋 Code editor
+- Basic GUI library
+- Window manager
+- Code editor
 
 ## Building from Source
 
@@ -50,35 +50,3 @@ Eth-OS Community Edition is a community-driven 32-bit operating system based on 
 ### Build Instructions
 
 #### Basic Build
-```bash
-# Compile OS and create ISO image
-make
-
-# Compile and run in QEMU
-make run
-
-# Clean build artifacts
-make clean
-```
-
-#### Development Build (with compile_commands.json)
-```bash
-# Build with compilation database
-./compile.sh
-
-# Build and run
-./compile_and_run.sh
-
-# Clean build
-./clean.sh
-```
-
-## Contributing
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
-
-## License
-[MIT License](LICENSE)
-
-## Acknowledgments
-- Thanks to all [contributors](https://github.com/ethanprogramser/eth-os-com/graphs/contributors)
-- Special thanks to [eprograms](https://www.youtube.com/@eprograms) for the original Eth-OS
