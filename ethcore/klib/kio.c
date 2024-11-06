@@ -15,6 +15,29 @@
 #define PRINTF_LENGTH_LONG 3
 #define PRINTF_LENGTH_LONG_LONG 4
 
+#define PRINTF_BUFFER_SIZE 1024
+
+static char printf_buffer[PRINTF_BUFFER_SIZE];
+static size_t buffer_index = 0;
+
+static void
+flush_printf_buffer(void) {
+    for (size_t i = 0; i < buffer_index; i++)
+        vga_print(printf_buffer[i]);
+    buffer_index = 0;
+}
+
+static void
+buffered_putc(char c) {
+    if (buffer_index >= PRINTF_BUFFER_SIZE - 1) {
+        flush_printf_buffer();
+    }
+    printf_buffer[buffer_index++] = c;
+    if (c == '\n') {
+        flush_printf_buffer();
+    }
+}
+
 extern void x86_div64_32 (uint64_t, uint32_t, uint64_t *, uint32_t *);
 
 int *__kprintf_number (int *, int, char, int);
@@ -53,7 +76,7 @@ __kprintf (const char *fmt, ...)
       }
       else
       {
-        __kputc (*fmt);
+        buffered_putc (*fmt);
       }
       break;
     case PRINTF_STATE_LENGTH:
@@ -102,7 +125,7 @@ __kprintf (const char *fmt, ...)
       switch (*fmt)
       {
       case 'c':
-        __kputc ((char)*argp);
+        buffered_putc ((char)*argp);
         argp++;
         break;
       case 's':
@@ -118,7 +141,7 @@ __kprintf (const char *fmt, ...)
         }
         break;
       case '%':
-        __kputc ('%');
+        buffered_putc ('%');
         break;
       case 'd':
       case 'i':
@@ -153,6 +176,10 @@ __kprintf (const char *fmt, ...)
       break;
     }
     fmt++;
+  }
+
+  if (buffer_index > 0) {
+    flush_printf_buffer();
   }
 }
 
