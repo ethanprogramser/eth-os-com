@@ -371,11 +371,25 @@ __kmemcmp (const void *blk1, const void *blk2, size_t n)
 void *
 __kmemcpy (void *dst, const void *src, size_t n)
 {
-  uint8_t *pd = (uint8_t *)dst;
-  const uint8_t *ps = (const uint8_t *)src;
-  for (; n--;)
-    *pd++ = *ps++;
-  return dst;
+  void *orig_dst = dst;
+
+  if (n >= sizeof(size_t) && 
+      !((size_t)dst & (sizeof(size_t)-1)) && 
+      !((size_t)src & (sizeof(size_t)-1))) {
+    size_t *dstw = dst;
+    const size_t *srcw = src;
+    for (; n >= sizeof(size_t); n -= sizeof(size_t))
+      *dstw++ = *srcw++;
+    dst = dstw;
+    src = srcw;
+  }
+
+  uint8_t *d = dst;
+  const uint8_t *s = src;
+  while (n--)
+    *d++ = *s++;
+
+  return orig_dst;
 }
 
 void *
@@ -414,4 +428,30 @@ __kmemset (void *blk, int c, int n)
   for (; n--;)
     *pd++ = c;
   return blk;
+}
+
+size_t
+__kstrnlen(const char *str, size_t maxlen) {
+    const char *char_ptr;
+    for (char_ptr = str; maxlen > 0 && *char_ptr != '\0'; --maxlen)
+        ++char_ptr;
+    return char_ptr - str;
+}
+
+size_t
+__kstrlcat(char *dst, const char *src, size_t size) {
+    size_t dlen = __kstrnlen(dst, size);
+    size_t len = __kstrlen(src);
+    
+    if (dlen >= size)
+        return size + len;
+        
+    if (len < size - dlen) {
+        __kmemcpy(dst + dlen, src, len + 1);
+    } else {
+        __kmemcpy(dst + dlen, src, size - dlen - 1);
+        dst[size - 1] = '\0';
+    }
+    
+    return dlen + len;
 }
