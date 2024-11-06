@@ -1,12 +1,13 @@
 #include "kernel/idt.h"
 #include "kernel/util.h"
-#include "kernel/vga.h"
 #include "klib/kint.h"
 #include "klib/kio.h"
-#include "klib/kmemory.h"
+#include "klib/kstring.h"
 
 struct IdtEntry idt_entries[256];
 struct IdtPtr idt_ptr;
+
+static IrqHandler irq_routines[16] = { 0 };
 
 extern void idt_flush (uint32_t);
 
@@ -150,10 +151,8 @@ isr_handler (struct InterruptRegisters *regs)
   }
 }
 
-void *irq_routines[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
 void
-irq_install_handler (int irq, void (*handler) (struct InterruptRegisters *r))
+irq_install_handler (int irq, IrqHandler handler)
 {
   irq_routines[irq] = handler;
 }
