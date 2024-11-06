@@ -437,21 +437,3 @@ __kstrnlen(const char *str, size_t maxlen) {
         ++char_ptr;
     return char_ptr - str;
 }
-
-size_t
-__kstrlcat(char *dst, const char *src, size_t size) {
-    size_t dlen = __kstrnlen(dst, size);
-    size_t len = __kstrlen(src);
-    
-    if (dlen >= size)
-        return size + len;
-        
-    if (len < size - dlen) {
-        __kmemcpy(dst + dlen, src, len + 1);
-    } else {
-        __kmemcpy(dst + dlen, src, size - dlen - 1);
-        dst[size - 1] = '\0';
-    }
-    
-    return dlen + len;
-}
