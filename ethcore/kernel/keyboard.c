@@ -10,13 +10,23 @@
 
 #define __K_KEYBOARD_MAX_EVENTS 0xFF
 
+#define KEYBOARD_BUFFER_SIZE 32
+
 struct KeyboardState
 {
   struct KeyboardEvent events[__K_KEYBOARD_MAX_EVENTS];
   size_t event_index;
 };
 
+struct KeyboardBuffer {
+    struct KeyboardEvent events[KEYBOARD_BUFFER_SIZE];
+    size_t read_pos;
+    size_t write_pos;
+    size_t count;
+};
+
 static struct KeyboardState keyboard_state = { 0 };
+static struct KeyboardBuffer kb_buffer = {0};
 
 static void __keyboard_add_event_to_list (struct KeyboardEvent *);
 
@@ -58,4 +68,25 @@ static void
 __keyboard_add_event_to_list (struct KeyboardEvent *event)
 {
   keyboard_state.events[keyboard_state.event_index++] = *event;
+}
+
+static void
+keyboard_buffer_push(struct KeyboardEvent *event) {
+    if (kb_buffer.count >= KEYBOARD_BUFFER_SIZE)
+        return; // Buffer full
+        
+    kb_buffer.events[kb_buffer.write_pos] = *event;
+    kb_buffer.write_pos = (kb_buffer.write_pos + 1) % KEYBOARD_BUFFER_SIZE;
+    kb_buffer.count++;
+}
+
+static bool
+keyboard_buffer_pop(struct KeyboardEvent *event) {
+    if (kb_buffer.count == 0)
+        return false;
+        
+    *event = kb_buffer.events[kb_buffer.read_pos];
+    kb_buffer.read_pos = (kb_buffer.read_pos + 1) % KEYBOARD_BUFFER_SIZE;
+    kb_buffer.count--;
+    return true;
 }
