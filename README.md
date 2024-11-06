@@ -1,66 +1,84 @@
 # Eth-OS Community Edition
 <div align="center">
 
-<img src="./.github/imgs/os-screenshot.png" />
+<img src="./.github/imgs/os-screenshot.png" alt="Eth-OS Screenshot" />
 
-![Badge Workflow](https://github.com/ethanprogramser/eth-os-com/actions/workflows/ci.yml/badge.svg)
-![Github Last Commit](https://img.shields.io/github/last-commit/ethanprogramser/eth-os-com)
-![Github Contributors](https://img.shields.io/github/contributors/ethanprogramser/eth-os-com)
-![GitHub Repo stars](https://img.shields.io/github/stars/ethanprogramser/eth-os-com)
+[![Badge Workflow](https://github.com/ethanprogramser/eth-os-com/actions/workflows/ci.yml/badge.svg)](https://github.com/ethanprogramser/eth-os-com/actions)
+[![Github Last Commit](https://img.shields.io/github/last-commit/ethanprogramser/eth-os-com)](https://github.com/ethanprogramser/eth-os-com/commits)
+[![Github Contributors](https://img.shields.io/github/contributors/ethanprogramser/eth-os-com)](https://github.com/ethanprogramser/eth-os-com/graphs/contributors)
+[![GitHub Repo stars](https://img.shields.io/github/stars/ethanprogramser/eth-os-com)](https://github.com/ethanprogramser/eth-os-com/stargazers)
 
 </div>
 
-Community driven 32-bit OS based on
-[Eth-OS](https://github.com/ethanprogramser/eth-os).
+## About
+Eth-OS Community Edition is a community-driven 32-bit operating system based on [Eth-OS](https://github.com/ethanprogramser/eth-os). The project is being developed as part of the [Programming Everyday](https://www.youtube.com/watch?v=fyZ0Gs9W194&list=PL29dTm11fF9QNI7_xIxwjcaLFCeNhaCym&pp=iAQB) YouTube series by [eprograms](https://www.youtube.com/@eprograms).
 
-__Eth-OS__ is being created in the
-[programming everyday](https://www.youtube.com/watch?v=fyZ0Gs9W194&list=PL29dTm11fF9QNI7_xIxwjcaLFCeNhaCym&pp=iAQB)
-youtube series by [eprograms](https://www.youtube.com/@eprograms).
+## Features and Roadmap
+### Implemented
+- ✅ Boot process
+- ✅ VGA driver
+- ✅ GDT (Global Descriptor Table)
+- ✅ Interrupts
+- ✅ Timer
+- ✅ Basic keyboard driver
 
-## TODO list
-* [x] Boot process
-* [x] VGA driver
-* [x] GDT
-* [x] Interrupts
-* [x] Timer
-* [x] Basic keyboard driver
-* [ ] Shell
-* [ ] Filesystem
-* [ ] Standard library
-* [ ] Basic GUI library
-* [ ] Window manager
-* [ ] Code editor
+### In Development
+- 🚧 Shell
+- 🚧 Filesystem
+- 🚧 Standard library
 
-## Manual build
-Tools:
-* NASM
-* C compiler
-* GRUB
-* xorriso
-* GNU Make
-* MTools
+### Planned
+- 📋 Basic GUI library
+- 📋 Window manager
+- 📋 Code editor
 
-Optional:
-* [compiledb](https://github.com/nickdiego/compiledb) (to generate
-  `compile_commands.json` for clangd)
+## Building from Source
 
-To run you need `qemu` installed.
+### Prerequisites
+#### Required Tools
+- NASM (Assembly compiler)
+- GCC or Clang (C compiler)
+- GRUB (Bootloader)
+- xorriso (ISO image creator)
+- GNU Make (Build system)
+- MTools (Disk image manipulation)
+- QEMU (For running the OS)
 
-``` sh
-# To compile OS and make .iso image.
+#### Optional Tools
+- [compiledb](https://github.com/nickdiego/compiledb) - Generates `compile_commands.json` for clangd
+
+### Build Instructions
+
+#### Basic Build
+```bash
+# Compile OS and create ISO image
 make
 
-# To compile OS and run it.
+# Compile and run in QEMU
 make run
 
-# To clean-up
+# Clean build artifacts
 make clean
+```
 
-# OR (needs compiledb)
-# This variant generates `compile_commands.json` for clangd
+#### Development Build (with compile_commands.json)
+```bash
+# Build with compilation database
 ./compile.sh
 
+# Build and run
 ./compile_and_run.sh
 
+# Clean build
 ./clean.sh
 ```
+
+## Contributing
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+[MIT License](LICENSE)
+
+## Acknowledgments
+- Thanks to all [contributors](https://github.com/ethanprogramser/eth-os-com/graphs/contributors)
+- Special thanks to [eprograms](https://www.youtube.com/@eprograms) for the original Eth-OS
