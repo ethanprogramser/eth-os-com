@@ -264,6 +264,17 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
       }
       break;
 
+      case KEYCODE_TAB:
+      {
+        if (state->position + 4 <= 0xFF)
+        {
+          __kmemset (state->line_text + state->position, ' ', 4);
+          state->position += 4;
+          __kputs ("    ");
+        }
+      }
+      break;
+
       default:
         break;
       }
@@ -314,8 +325,6 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
           __kputs ("\nYou have entered maximum of 255 characters.\n");
 
           __kputs (prefix);
-          --state->position;
-          state->line_text[0xFE] = 0;
           __kputs (state->line_text);
         }
       }
