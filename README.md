@@ -65,5 +65,5 @@ make clean
 ./clean.sh
 ```
 
-## Contributors wall
+# Contributors wall
 ![list of conributors](https://contrib.rocks/image?repo=ethanprogramser/eth-os-com)
