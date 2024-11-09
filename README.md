@@ -36,8 +36,8 @@ Tools:
 * NASM
 * C compiler
 * GRUB
-* xorriso
 * GNU Make
+* DOS FS Tools
 * MTools
 
 Optional:

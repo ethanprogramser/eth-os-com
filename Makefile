@@ -23,10 +23,22 @@ grub: ethcore
 	$(MAKE) -C $(abspath grub)
 
 # Make an `.iso` file
-iso: ethcore grub
+iso: ethcore grub $(OUT_DIR)/iso/$(ISO_NAME)
+
+$(OUT_DIR)/iso/$(ISO_NAME):
 	@echo "Making an iso..."
-	mkdir -p $(OUT_DIR)/iso/
-	grub-mkrescue -o $(OUT_DIR)/iso/$(ISO_NAME) $(OUT_DIR)/ethos
+	mkdir -p $(OUT_DIR)/iso
+	dd if=/dev/zero of=$(OUT_DIR)/iso/$(ISO_NAME) bs=1M count=100
+	mkfs.fat -F32 $(OUT_DIR)/iso/$(ISO_NAME)
+	sudo losetup /dev/loop0 $(OUT_DIR)/iso/$(ISO_NAME)
+	sudo mkdir $(OUT_DIR)/iso/tmp
+	sudo mount /dev/loop0 $(OUT_DIR)/iso/tmp
+	sudo mkdir $(OUT_DIR)/iso/tmp/boot
+	sudo grub-install --force --target=i386-pc --boot-directory=$(OUT_DIR)/iso/tmp/boot /dev/loop0
+	sudo cp -r $(OUT_DIR)/ethos/* $(OUT_DIR)/iso/tmp
+	sudo umount $(OUT_DIR)/iso/tmp
+	sudo losetup -d /dev/loop0
+	sudo rm -rf $(OUT_DIR)/iso/tmp
 
 # Run
 run: all
