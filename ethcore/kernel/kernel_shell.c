@@ -13,6 +13,7 @@
 // strange glitches may occur when pressing backspace at last position.
 #define MAX_LINE_LENGTH (0xFFul)
 #define MAX_CMDS (0x7Ful)
+#define MAX_BUFFER_SIZE (0x10ul)
 
 enum KernelShellStatus
 {
@@ -23,12 +24,17 @@ enum KernelShellStatus
 
 struct KernelShellState
 {
+  enum KernelShellStatus status;
+
   char line_text[MAX_LINE_LENGTH];
   size_t position;
+
   bool caps;
-  uint8_t shifts_pressed;
-  enum KernelShellStatus status;
   bool wait_for_control_code;
+  uint8_t shifts_pressed;
+
+  char buffer[MAX_BUFFER_SIZE][MAX_LINE_LENGTH];
+  size_t buffer_position, buffer_last;
 };
 
 static struct KernelShellState kernel_shell_state = { 0 };
@@ -159,6 +165,8 @@ static void __kernel_shell_handle_event (struct KeyboardEvent *event,
 static void __kernel_shell_handle_command (struct KernelShellState *state,
                                            const char *cmd);
 static void __kernel_shell_print_control_code (char c);
+static void __kernel_shell_extend_buffer (struct KernelShellState *state,
+                                          const char *cmd);
 
 void
 kernel_shell_init (void)
@@ -192,9 +200,10 @@ kernel_shell_loop (void)
 
     case KERNEL_SHELL_STATUS_SUBMITTED:
     {
-      if ((uint8_t)kernel_shell_state.line_text[0] > 0)
+      if (__kstrnlen (kernel_shell_state.line_text, MAX_LINE_LENGTH) > 0)
       {
-        // TODO: Add command to the command buffer.
+        __kernel_shell_extend_buffer (
+            &kernel_shell_state, (const char *)kernel_shell_state.line_text);
         __kernel_shell_handle_command (
             &kernel_shell_state, (const char *)kernel_shell_state.line_text);
       }
@@ -205,6 +214,8 @@ kernel_shell_loop (void)
       __kmemset (kernel_shell_state.line_text, 0,
                  sizeof (kernel_shell_state.line_text));
       kernel_shell_state.position = 0;
+
+      kernel_shell_state.buffer_position = 0;
     }
     break;
 
@@ -284,6 +295,37 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
           __kputs (tab);
           state->position += size;
         }
+      }
+      break;
+
+      case KEYCODE_UP:
+      {
+        size_t line_len = state->position;
+        __kstrncpy (state->line_text, state->buffer[state->buffer_position],
+                    MAX_LINE_LENGTH);
+        state->position = __kstrnlen (state->line_text, MAX_LINE_LENGTH);
+        if (state->buffer_position < state->buffer_last - 1)
+          state->buffer_position++;
+        else
+          state->buffer_position = 0;
+        for (size_t i = 0; i < line_len; ++i)
+          __kputc ('\b');
+        __kputs (state->line_text);
+      }
+      break;
+      case KEYCODE_DOWN:
+      {
+        size_t line_len = state->position;
+        if (state->buffer_position > 0)
+          state->buffer_position--;
+        else
+          state->buffer_position = state->buffer_last - 1;
+        __kstrncpy (state->line_text, state->buffer[state->buffer_position],
+                    MAX_LINE_LENGTH);
+        state->position = __kstrnlen (state->line_text, MAX_LINE_LENGTH);
+        for (size_t i = 0; i < line_len; ++i)
+          __kputc ('\b');
+        __kputs (state->line_text);
       }
       break;
 
@@ -413,4 +455,17 @@ __kernel_shell_print_control_code (char c)
     __kputc (c);
     vga_set_color (VGA_COLOR (VGA_COLOR_BLACK, VGA_COLOR_WHITE));
   }
+}
+
+static void
+__kernel_shell_extend_buffer (struct KernelShellState *state, const char *cmd)
+{
+  if (state->buffer[state->buffer_last] != 0
+      && state->buffer_last < MAX_BUFFER_SIZE - 1)
+    state->buffer_last++;
+
+  for (size_t i = MAX_BUFFER_SIZE - 1; i > 0; --i)
+    __kstrncpy (state->buffer[i], state->buffer[i - 1], MAX_LINE_LENGTH);
+
+  __kstrncpy (state->buffer[0], cmd, MAX_LINE_LENGTH);
 }
