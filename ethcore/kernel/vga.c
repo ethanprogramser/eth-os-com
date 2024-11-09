@@ -1,10 +1,11 @@
 #include "kernel/vga.h"
 #include "kernel/util.h"
-#include "klib/kmemory.h"
+#include "klib/kstring.h"
 
 #define __K_DEFAULT_VGA_WIDTH 80
 #define __K_DEFAULT_VGA_HEIGHT 25
 
+// Kernel offset + VGA offset
 #define __K_VGA_BASE 0xC00B8000
 
 #define __K_VGA_DEFAULT_COLOR (VGA_COLOR_BLUE << 12) | (VGA_COLOR_WHITE << 8)
