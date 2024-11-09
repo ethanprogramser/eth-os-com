@@ -44,18 +44,22 @@ keyboard_handler (struct InterruptRegisters *regs)
 }
 
 void
-keyboard_for_each_event (void (*func) (struct KeyboardEvent *, void *),
-                         void *data)
+keyboard_for_each_event (KeyboardEventHandler handler, void *data)
 {
-  for (size_t i = 0; i < keyboard_state.event_index; ++i)
+  if (keyboard_state.event_index > 0)
   {
-    func (&keyboard_state.events[i], data);
-    __kmemset (&keyboard_state.events[i], 0, sizeof (struct KeyboardEvent));
+    for (size_t i = 0; i < keyboard_state.event_index; ++i)
+      handler (&keyboard_state.events[i], data);
+    __kmemset (keyboard_state.events, 0,
+               sizeof (struct KeyboardEvent) * keyboard_state.event_index);
+    keyboard_state.event_index = 0;
   }
 }
 
 static void
 __keyboard_add_event_to_list (struct KeyboardEvent *event)
 {
-  keyboard_state.events[keyboard_state.event_index++] = *event;
+  keyboard_state.events[keyboard_state.event_index] = *event;
+  if (keyboard_state.event_index <= __K_KEYBOARD_MAX_EVENTS)
+    keyboard_state.event_index++;
 }

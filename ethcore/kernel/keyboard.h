@@ -8,8 +8,9 @@ struct InterruptRegisters;
 
 enum KeyboardEventType
 {
-  KEYBOARD_EVENT_TYPE_PRESSED = 0,
-  KEYBOARD_EVENT_TYPE_RELEASED = 1,
+  KEYBOARD_EVENT_TYPE_INVALID = 0,
+  KEYBOARD_EVENT_TYPE_PRESSED = 1,
+  KEYBOARD_EVENT_TYPE_RELEASED = 2,
 };
 
 struct KeyboardEvent
@@ -18,9 +19,10 @@ struct KeyboardEvent
   enum KeyboardEventType event_type;
 };
 
+typedef void (*KeyboardEventHandler) (struct KeyboardEvent *, void *);
+
 void keyboard_init (void);
 void keyboard_handler (struct InterruptRegisters *);
-void keyboard_for_each_event (void (*func) (struct KeyboardEvent *, void *),
-                              void *data);
+void keyboard_for_each_event (KeyboardEventHandler, void *data);
 
 #endif // __K_KEYBOARD_H__
