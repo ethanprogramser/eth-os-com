@@ -15,6 +15,7 @@ runs:
           grub \
           dosfstools \
           nasm \
+          xorriso \
           mtools
 
     - name: Checkout Repository

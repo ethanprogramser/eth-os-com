@@ -25,7 +25,7 @@ jobs:
 
       - name: Build Eth-OS
         run: |
-          make
+          make oldiso
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

@@ -2,9 +2,10 @@ ISO_NAME=ethos.iso
 
 include config.mk
 
-.PHONY: all dirs ethcore grub iso run clean
+.PHONY: oldiso all dirs ethcore grub iso run clean oldiso_stage
 
 all: dirs ethcore grub iso
+oldiso: dirs ethcore grub oldiso_stage
 
 # Create directories
 dirs:
@@ -39,6 +40,11 @@ $(OUT_DIR)/iso/$(ISO_NAME):
 	sudo umount $(OUT_DIR)/iso/tmp
 	sudo losetup -d /dev/loop0
 	sudo rm -rf $(OUT_DIR)/iso/tmp
+
+oldiso_stage: ethcore grub
+	@echo "[DEPRECATED] Making an iso..."
+	mkdir -p $(OUT_DIR)/iso
+	grub-mkrescue -o $(OUT_DIR)/iso/$(ISO_NAME) $(OUT_DIR)/ethos
 
 # Run
 run: all
