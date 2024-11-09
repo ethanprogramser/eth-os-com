@@ -1,7 +1,6 @@
 #include "kernel/timer.h"
 #include "kernel/idt.h"
 #include "kernel/util.h"
-#include "kernel/vga.h"
 #include "klib/kint.h"
 
 uint64_t ticks;
@@ -10,7 +9,7 @@ const uint32_t freq = 100;
 void
 __irq0_handler (struct InterruptRegisters *regs)
 {
-  ticks += 1;
+  ticks++;
 }
 
 void
