@@ -3,6 +3,8 @@
 
 #include "klib/kint.h"
 
+#define VGA_COLOR(b, f) ((uint16_t)(((b) << 12) | ((f) << 8)))
+
 enum VgaColor
 {
   VGA_COLOR_BLACK = 0x00,
@@ -23,9 +25,8 @@ enum VgaColor
   VGA_COLOR_WHITE = 0x0F,
 };
 
-uint16_t vga_color (enum VgaColor bg_color, enum VgaColor fg_color);
 void vga_init (void);
-void vga_set_color (enum VgaColor bg_color, enum VgaColor fg_color);
+void vga_set_color (uint16_t color);
 void vga_clear_color (void);
 void vga_clear_screen (void);
 void vga_print (char c);

@@ -164,7 +164,7 @@ void
 kernel_shell_init (void)
 {
   vga_reset ();
-  vga_set_color (VGA_COLOR_BLACK, VGA_COLOR_WHITE);
+  vga_set_color (VGA_COLOR (VGA_COLOR_BLACK, VGA_COLOR_WHITE));
   vga_clear_screen ();
 
   __kputs ("Welcome to Eth-OS Kernel Shell.\n\n");
@@ -408,9 +408,9 @@ __kernel_shell_print_control_code (char c)
 {
   if (c > 0)
   {
-    vga_set_color (VGA_COLOR_BLACK, VGA_COLOR_DGREY);
+    vga_set_color (VGA_COLOR (VGA_COLOR_BLACK, VGA_COLOR_DGREY));
     __kputc ('^');
     __kputc (c);
-    vga_set_color (VGA_COLOR_BLACK, VGA_COLOR_WHITE);
+    vga_set_color (VGA_COLOR (VGA_COLOR_BLACK, VGA_COLOR_WHITE));
   }
 }

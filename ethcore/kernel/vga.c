@@ -21,23 +21,7 @@ struct VgaState
 
 static struct VgaState vga_state = { 0 };
 
-void
-__vga_new_line (void)
-{
-  if (vga_state.line < vga_state.height - 1)
-    vga_state.line++;
-  else
-    vga_scroll (1);
-
-  vga_state.column = 0;
-  vga_move_cursor (vga_state.column, vga_state.line);
-}
-
-uint16_t
-vga_color (enum VgaColor bg_color, enum VgaColor fg_color)
-{
-  return (bg_color << 12) | (fg_color << 8);
-}
+static void __vga_new_line (void);
 
 void
 vga_init (void)
@@ -47,9 +31,9 @@ vga_init (void)
 }
 
 void
-vga_set_color (enum VgaColor bg_color, enum VgaColor fg_color)
+vga_set_color (uint16_t color)
 {
-  vga_state.color = vga_color (bg_color, fg_color);
+  vga_state.color = color;
 }
 
 void
@@ -158,7 +142,7 @@ vga_reset (void)
   vga_state.width = __K_DEFAULT_VGA_WIDTH;
   vga_state.height = __K_DEFAULT_VGA_HEIGHT;
 
-  vga_set_color (VGA_COLOR_BLACK, VGA_COLOR_WHITE);
+  vga_set_color (VGA_COLOR (VGA_COLOR_BLACK, VGA_COLOR_WHITE));
   vga_clear_screen ();
 
   vga_disable_cursor ();
@@ -193,4 +177,16 @@ vga_move_cursor (uint8_t x, uint8_t y)
   out_port_b (0x3D5, (uint8_t)(pos & 0xFF));
   out_port_b (0x3D4, 0x0E);
   out_port_b (0x3D5, (uint8_t)((pos >> 8) & 0xFF));
+}
+
+static void
+__vga_new_line (void)
+{
+  if (vga_state.line < vga_state.height - 1)
+    vga_state.line++;
+  else
+    vga_scroll (1);
+
+  vga_state.column = 0;
+  vga_move_cursor (vga_state.column, vga_state.line);
 }
