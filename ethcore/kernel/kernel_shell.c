@@ -2,10 +2,17 @@
 #include "kernel/kernel_shell_cmds.h"
 #include "kernel/keyboard.h"
 #include "kernel/keycodes.h"
+#include "kernel/util.h"
 #include "kernel/vga.h"
 #include "klib/kctype.h"
+#include "klib/kdef.h"
 #include "klib/kio.h"
 #include "klib/kstring.h"
+
+// WARNING: When `MAX_LINE_LENGTH` is 0x100 (256) (or maybe is power of 2),
+// strange glitches may occur when pressing backspace at last position.
+#define MAX_LINE_LENGTH (0xFFul)
+#define MAX_CMDS (0x7Ful)
 
 enum KernelShellStatus
 {
@@ -16,7 +23,7 @@ enum KernelShellStatus
 
 struct KernelShellState
 {
-  char line_text[0xFF];
+  char line_text[MAX_LINE_LENGTH];
   size_t position;
   bool caps;
   uint8_t shifts_pressed;
@@ -28,7 +35,7 @@ static struct KernelShellState kernel_shell_state = { 0 };
 
 static const char *prefix = "ksh> ";
 
-static const struct KernelShellCMD cmds[0x7F] = {
+static const struct KernelShellCMD cmds[MAX_CMDS] = {
   { ksh_clear, "clear" },
   { ksh_help, "help" },
   { ksh_info, "info" },
@@ -149,7 +156,8 @@ static char __kernel_shell_translate_keycode (enum Keycode keycode,
                                               bool shifted);
 static void __kernel_shell_handle_event (struct KeyboardEvent *event,
                                          void *data);
-static void __kernel_shell_handle_command (struct KernelShellState *state);
+static void __kernel_shell_handle_command (struct KernelShellState *state,
+                                           const char *cmd);
 static void __kernel_shell_print_control_code (char c);
 
 void
@@ -187,7 +195,8 @@ kernel_shell_loop (void)
       if ((uint8_t)kernel_shell_state.line_text[0] > 0)
       {
         // TODO: Add command to the command buffer.
-        __kernel_shell_handle_command (&kernel_shell_state);
+        __kernel_shell_handle_command (
+            &kernel_shell_state, (const char *)kernel_shell_state.line_text);
       }
 
       __kputs (prefix);
@@ -266,11 +275,14 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
 
       case KEYCODE_TAB:
       {
-        if (state->position + 4 <= 0xFF)
+        if (state->position < MAX_LINE_LENGTH)
         {
-          __kmemset (state->line_text + state->position, ' ', 4);
-          state->position += 4;
-          __kputs ("    ");
+          size_t size = clamp (MAX_LINE_LENGTH - state->position, 0, 4);
+          char tab[5] = { 0 };
+          __kmemset (tab, ' ', size);
+          __kmemset ((void *)(state->line_text + state->position), ' ', size);
+          __kputs (tab);
+          state->position += size;
         }
       }
       break;
@@ -301,7 +313,7 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
         {
           __kernel_shell_print_control_code (c);
           state->status = KERNEL_SHELL_STATUS_SUBMITTED;
-          __kmemset (state->line_text, 0, 0xFF);
+          __kmemset (state->line_text, 0, MAX_LINE_LENGTH);
           state->position = 0;
           __kputc ('\n');
         }
@@ -315,7 +327,7 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
       {
         c = state->caps ? __ktoggle (c) : c;
 
-        if (state->position < 0xFF)
+        if (state->position < MAX_LINE_LENGTH)
         {
           state->line_text[state->position++] = c;
           __kputc (c);
@@ -362,12 +374,12 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
 }
 
 static void
-__kernel_shell_handle_command (struct KernelShellState *state)
+__kernel_shell_handle_command (struct KernelShellState *state, const char *cmd)
 {
-  char trimmed[0xFF];
-  __kstrncpy (trimmed, state->line_text, 0xFF);
-  for (size_t i = 0;
-       i < __kstrnlen (state->line_text, 0xFF) && trimmed[i] != 0; ++i)
+  char trimmed[MAX_LINE_LENGTH];
+  __kstrncpy (trimmed, cmd, MAX_LINE_LENGTH);
+  for (size_t i = 0; i < __kstrnlen (cmd, MAX_LINE_LENGTH) && trimmed[i] != 0;
+       ++i)
   {
     if (__kisspace (trimmed[i]))
     {
@@ -376,9 +388,9 @@ __kernel_shell_handle_command (struct KernelShellState *state)
     }
   }
 
-  for (size_t i = 0; i < 0x7F; ++i)
+  for (size_t i = 0; i < MAX_CMDS; ++i)
   {
-    size_t cmd_len = __kstrnlen (cmds[i].cmd, 0xFF);
+    size_t cmd_len = __kstrnlen (cmds[i].cmd, MAX_LINE_LENGTH);
     if (__kstrneq (trimmed, cmds[i].cmd, cmd_len) && trimmed[cmd_len] == 0)
     {
       cmds[i].func ((const char *)(trimmed + cmd_len + 1));
@@ -387,7 +399,7 @@ __kernel_shell_handle_command (struct KernelShellState *state)
   }
 
   __kputs ("ksh: Unknown command: ");
-  __kputs (state->line_text);
+  __kputs (cmd);
   __kputc ('\n');
 }
 
