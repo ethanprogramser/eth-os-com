@@ -42,7 +42,7 @@ Tools:
 
 Optional:
 * [compiledb](https://github.com/nickdiego/compiledb) (to generate
-  `compile_commands.json` for clangd)
+`compile_commands.json` for clangd)
 
 To run you need `qemu` installed.
 
