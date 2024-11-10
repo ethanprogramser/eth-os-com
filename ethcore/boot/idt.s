@@ -1,143 +1,168 @@
-global idt_flush
+    .globl idt_flush
 idt_flush:
-    mov eax, [esp+4]
-    lidt [eax]
+    movl 4(%esp), %eax
+    lidt (%eax)
     sti
     ret
 
-%macro ISR_NOERRCODE 1
-    global isr%1
-    isr%1:
-        cli
-        push long 0
-        push long %1
-        jmp isr_common_stub
-%endmacro
+    .globl isr0
+isr0:
+    cli
+    pushl $0
+    pushl $0
+    jmp isr_common_stub
 
-%macro ISR_ERRCODE 1
-    global isr%1
-    isr%1:
-        cli
-        push long %1
-        jmp isr_common_stub
-%endmacro
+    .globl isr1
+isr1:
+    cli
+    pushl $0
+    pushl $1
+    jmp isr_common_stub
 
-%macro IRQ 2
-    global irq%1
-    irq%1:
-        cli
-        push long 0
-        push long %2
-        jmp irq_common_stub
-%endmacro
+    .globl isr2
+isr2:
+    cli
+    pushl $0
+    pushl $2
+    jmp isr_common_stub
 
-ISR_NOERRCODE 0
-ISR_NOERRCODE 1
-ISR_NOERRCODE 2
-ISR_NOERRCODE 3
-ISR_NOERRCODE 4
-ISR_NOERRCODE 5
-ISR_NOERRCODE 6
-ISR_NOERRCODE 7
+    .globl isr3
+isr3:
+    cli
+    pushl $0
+    pushl $3
+    jmp isr_common_stub
 
-ISR_ERRCODE 8
-ISR_NOERRCODE 9 
-ISR_ERRCODE 10
-ISR_ERRCODE 11
-ISR_ERRCODE 12
-ISR_ERRCODE 13
-ISR_ERRCODE 14
-ISR_NOERRCODE 15
-ISR_NOERRCODE 16
-ISR_NOERRCODE 17
-ISR_NOERRCODE 18
-ISR_NOERRCODE 19
-ISR_NOERRCODE 20
-ISR_NOERRCODE 21
-ISR_NOERRCODE 22
-ISR_NOERRCODE 23
-ISR_NOERRCODE 24
-ISR_NOERRCODE 25
-ISR_NOERRCODE 26
-ISR_NOERRCODE 27
-ISR_NOERRCODE 28
-ISR_NOERRCODE 29
-ISR_NOERRCODE 30
-ISR_NOERRCODE 31
-ISR_NOERRCODE 128
-ISR_NOERRCODE 177
+    .globl isr4
+isr4:
+    cli
+    pushl $0
+    pushl $4
+    jmp isr_common_stub
 
-IRQ 0, 32
-IRQ   1,    33
-IRQ   2,    34
-IRQ   3,    35
-IRQ   4,    36
-IRQ   5,    37
-IRQ   6,    38
-IRQ   7,    39
-IRQ   8,    40
-IRQ   9,    41
-IRQ  10,    42
-IRQ  11,    43
-IRQ  12,    44
-IRQ  13,    45
-IRQ  14,    46
-IRQ  15,    47
+    .globl isr5
+isr5:
+    cli
+    pushl $0
+    pushl $5
+    jmp isr_common_stub
 
-extern isr_handler
+    .globl isr6
+isr6:
+    cli
+    pushl $0
+    pushl $6
+    jmp isr_common_stub
+
+    .globl isr7
+isr7:
+    cli
+    pushl $0
+    pushl $7
+    jmp isr_common_stub
+
+    .globl isr8
+isr8:
+    cli
+    pushl $8
+    jmp isr_common_stub
+
+    .globl isr9
+isr9:
+    cli
+    pushl $0
+    pushl $9
+    jmp isr_common_stub
+
+    .globl irq0
+irq0:
+    cli
+    pushl $0
+    pushl $32
+    jmp irq_common_stub
+
+    .globl irq1
+irq1:
+    cli
+    pushl $0
+    pushl $33
+    jmp irq_common_stub
+
+    .globl irq2
+irq2:
+    cli
+    pushl $0
+    pushl $34
+    jmp irq_common_stub
+
+    .globl irq3
+irq3:
+    cli
+    pushl $0
+    pushl $35
+    jmp irq_common_stub
+
+    .globl irq4
+irq4:
+    cli
+    pushl $0
+    pushl $36
+    jmp irq_common_stub
+
+    .extern isr_handler
 isr_common_stub:
     pusha
-    mov eax,ds
-    push eax
-    mov eax, cr2
-    push eax
+    movl %ds, %eax
+    pushl %eax
+    movl %cr2, %eax
+    pushl %eax
 
-    mov ax, 0x10
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
+    movw $0x10, %ax
+    movw %ax, %ds
+    movw %ax, %es
+    movw %ax, %fs
+    movw %ax, %gs
 
-    push esp
+    pushl %esp
     call isr_handler
 
-    add esp, 8
-    pop ebx
-    mov ds, bx
-    mov es, bx
-    mov fs, bx
-    mov gs, bx
+    addl $8, %esp
+    popl %ebx
+    movw %bx, %ds
+    movw %bx, %es
+    movw %bx, %fs
+    movw %bx, %gs
 
     popa
-    add esp, 8
+    addl $8, %esp
     sti
     iret
 
-extern irq_handler
+    .extern irq_handler
 irq_common_stub:
     pusha
-    mov eax,ds
-    push eax
-    mov eax, cr2
-    push eax
+    movl %ds, %eax
+    pushl %eax
+    movl %cr2, %eax
+    pushl %eax
 
-    mov ax, 0x10
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
+    movw $0x10, %ax
+    movw %ax, %ds
+    movw %ax, %es
+    movw %ax, %fs
+    movw %ax, %gs
 
-    push esp
+    pushl %esp
     call irq_handler
 
-    add esp, 8
-    pop ebx
-    mov ds, bx
-    mov es, bx
-    mov fs, bx
-    mov gs, bx
+    addl $8, %esp
+    popl %ebx
+    movw %bx, %ds
+    movw %bx, %es
+    movw %bx, %fs
+    movw %bx, %gs
 
     popa
-    add esp, 8
+    addl $8, %esp
     sti
     iret

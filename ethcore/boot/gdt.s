@@ -1,20 +1,20 @@
-global gdt_flush
+    .globl gdt_flush
 gdt_flush:
-    mov eax, [esp+4]
-    lgdt [eax]
+    movl 4(%esp), %eax
+    lgdt (%eax)
 
-    mov eax, 0x10
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-    mov ss, ax
-    jmp 0x08:.flush
+    movw $0x10, %ax
+    movw %ax, %ds
+    movw %ax, %es
+    movw %ax, %fs
+    movw %ax, %gs
+    movw %ax, %ss
+    ljmp $0x08, $.flush
 .flush:
     ret
 
-global tss_flush
+    .globl tss_flush
 tss_flush:
-    mov ax, 0x2B
-    ltr ax
+    movw $0x2B, %ax
+    ltr %ax
     ret
