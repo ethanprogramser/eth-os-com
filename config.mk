@@ -4,6 +4,6 @@ export ETHCORE_SRC_DIR=$(abspath ethcore)
 export OUT_DIR=$(abspath out)
 export GRUB_CFG_DIR=$(abspath grub)
 
-export ASM=nasm
+export ASM=as
 export CC=cc
 export LD=ld
