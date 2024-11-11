@@ -22,7 +22,7 @@ struct VgaState
 
 static struct VgaState vga_state = { 0 };
 
-static void __vga_new_line (void);
+static inline void __vga_new_line (void);
 
 void
 vga_init (void)
@@ -180,7 +180,7 @@ vga_move_cursor (uint8_t x, uint8_t y)
   out_port_b (0x3D5, (uint8_t)((pos >> 8) & 0xFF));
 }
 
-static void
+static inline void
 __vga_new_line (void)
 {
   if (vga_state.line < vga_state.height - 1)
