@@ -43,12 +43,13 @@ $(OUT_DIR)/iso/$(ISO_NAME):
 	sudo rm -rf $(OUT_DIR)/iso/tmp
 
 fastiso: ethcore grub
-	$(EECHO) "[$(YELLOW)ISO$(NORMAL)] Making fast ISO..."
+	$(EECHO) "[$(GREEN)ISO$(NORMAL)] Making fast ISO..."
 	mkdir -p $(OUT_DIR)/iso
 	grub-mkrescue -o $(OUT_DIR)/iso/$(ISO_NAME) $(OUT_DIR)/ethos
 
 # Run
 run: all
+	$(EECHO) "[$(RED)QEMU$(NORMAL)] Running ISO..."
 	qemu-system-i386 -drive format=raw,file=$(OUT_DIR)/iso/$(ISO_NAME)
 
 # Clean-up everything
