@@ -34,7 +34,7 @@ youtube series by [eprograms](https://www.youtube.com/@eprograms).
 ## Manual build
 Tools:
 * NASM
-* C compiler
+* GCC/Clang
 * GRUB
 * GNU Make
 * DOS FS Tools
