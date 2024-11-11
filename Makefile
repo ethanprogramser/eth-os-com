@@ -1,11 +1,12 @@
 ISO_NAME=ethos.iso
 
 include config.mk
+include misc.mk
 
 .PHONY: actions all dirs ethcore grub iso run clean oldiso
 
-all: dirs ethcore grub iso
-actions: dirs ethcore grub oldiso
+all: dirs ethcore grub fastiso
+release: dirs ethcore grub iso
 
 # Create directories
 dirs:
@@ -15,19 +16,19 @@ dirs:
 
 # Eth-Core
 ethcore:
-	@echo "Compiling Eth-Core..."
+	$(EECHO) "[$(BLUE)ETHCORE$(NORMAL)] Compiling Eth-Core..."
 	$(MAKE) -C $(ETHCORE_SRC_DIR)
 
 # Place default GRUB config
 grub: ethcore
-	@echo "Placing default GRUB config..."
+	$(EECHO) "[$(BLUE)GRUB$(NORMAL)] Placing default GRUB config..."
 	$(MAKE) -C $(abspath grub)
 
 # Make an `.iso` file
 iso: ethcore grub $(OUT_DIR)/iso/$(ISO_NAME)
 
 $(OUT_DIR)/iso/$(ISO_NAME):
-	@echo "Making an iso..."
+	$(EECHO) "[$(GREEN)ISO$(NORMAL)] Making release ISO..."
 	mkdir -p $(OUT_DIR)/iso
 	dd if=/dev/zero of=$(OUT_DIR)/iso/$(ISO_NAME) bs=1M count=100
 	mkfs.fat -F32 $(OUT_DIR)/iso/$(ISO_NAME)
@@ -41,8 +42,8 @@ $(OUT_DIR)/iso/$(ISO_NAME):
 	sudo losetup -d /dev/loop0
 	sudo rm -rf $(OUT_DIR)/iso/tmp
 
-oldiso: ethcore grub
-	@echo "[DEPRECATED] Making an iso..."
+fastiso: ethcore grub
+	$(EECHO) "[$(YELLOW)ISO$(NORMAL)] Making fast ISO..."
 	mkdir -p $(OUT_DIR)/iso
 	grub-mkrescue -o $(OUT_DIR)/iso/$(ISO_NAME) $(OUT_DIR)/ethos
 
