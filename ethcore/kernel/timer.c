@@ -6,7 +6,7 @@
 uint64_t ticks;
 const uint32_t freq = 100;
 
-void
+static inline void
 __irq0_handler (struct InterruptRegisters *regs)
 {
   ticks++;

@@ -18,7 +18,7 @@ struct KeyboardState
 
 static struct KeyboardState keyboard_state = { 0 };
 
-static void __keyboard_add_event_to_list (struct KeyboardEvent *);
+static inline void __keyboard_add_event_to_list (struct KeyboardEvent *);
 
 void
 keyboard_init (void)
@@ -56,7 +56,7 @@ keyboard_for_each_event (KeyboardEventHandler handler, void *data)
   }
 }
 
-static void
+static inline void
 __keyboard_add_event_to_list (struct KeyboardEvent *event)
 {
   keyboard_state.events[keyboard_state.event_index] = *event;

@@ -105,6 +105,17 @@ enum Keycode
   KEYCODE_RSUPER = 0x87,
 };
 
-enum Keycode scancode_to_keycode (enum Scancode, enum LayoutMapping);
+extern const enum Keycode qwerty_keycodes[0xFF];
+
+static inline enum Keycode
+scancode_to_keycode (enum Scancode scancode, enum LayoutMapping layout)
+{
+  switch (layout)
+  {
+  case LAYOUT_MAPPING_DVORAK: // FIXME: not implemented yet.
+  default:
+    return qwerty_keycodes[scancode & 0xFF];
+  }
+}
 
 #endif // __K_KEYCODES_H__

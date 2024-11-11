@@ -158,15 +158,16 @@ static const char keycode_mapping_shifted[0xFF]
         // 0x80-0x87
         0, 0, 0, 0, 0, 0, 0, 0 };
 
-static char __kernel_shell_translate_keycode (enum Keycode keycode,
-                                              bool shifted);
-static void __kernel_shell_handle_event (struct KeyboardEvent *event,
-                                         void *data);
-static void __kernel_shell_handle_command (struct KernelShellState *state,
-                                           const char *cmd);
-static void __kernel_shell_print_control_code (char c);
-static void __kernel_shell_extend_buffer (struct KernelShellState *state,
-                                          const char *cmd);
+static inline char __kernel_shell_translate_keycode (enum Keycode keycode,
+                                                     bool shifted);
+static inline void __kernel_shell_handle_event (struct KeyboardEvent *event,
+                                                void *data);
+static inline void
+__kernel_shell_handle_command (struct KernelShellState *state,
+                               const char *cmd);
+static inline void __kernel_shell_print_control_code (char c);
+static inline void
+__kernel_shell_extend_buffer (struct KernelShellState *state, const char *cmd);
 
 void
 kernel_shell_init (void)
@@ -225,14 +226,14 @@ kernel_shell_loop (void)
   }
 }
 
-static char
+static inline char
 __kernel_shell_translate_keycode (enum Keycode keycode, bool shifted)
 {
   return shifted ? keycode_mapping_shifted[keycode]
                  : keycode_mapping_normal[keycode];
 }
 
-static void
+static inline void
 __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
 {
   struct KernelShellState *state = (struct KernelShellState *)data;
@@ -415,7 +416,7 @@ __kernel_shell_handle_event (struct KeyboardEvent *event, void *data)
   }
 }
 
-static void
+static inline void
 __kernel_shell_handle_command (struct KernelShellState *state, const char *cmd)
 {
   char trimmed[MAX_LINE_LENGTH];
@@ -445,7 +446,7 @@ __kernel_shell_handle_command (struct KernelShellState *state, const char *cmd)
   __kputc ('\n');
 }
 
-static void
+static inline void
 __kernel_shell_print_control_code (char c)
 {
   if (c > 0)
@@ -457,7 +458,7 @@ __kernel_shell_print_control_code (char c)
   }
 }
 
-static void
+static inline void
 __kernel_shell_extend_buffer (struct KernelShellState *state, const char *cmd)
 {
   if (state->buffer[state->buffer_last] != 0

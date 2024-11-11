@@ -8,9 +8,9 @@ struct GdtEntry gdt_entries[6];
 struct GdtPtr gdt_ptr;
 struct TssEntry tss_entry;
 
-void __tss_write (uint32_t num, uint16_t ss0, uint32_t esp0);
-void __gdt_set_gate (uint32_t num, size_t base, uint32_t limit, uint8_t access,
-                     uint8_t gran);
+static inline void __tss_write (uint32_t num, uint16_t ss0, uint32_t esp0);
+static inline void __gdt_set_gate (uint32_t num, size_t base, uint32_t limit,
+                                   uint8_t access, uint8_t gran);
 
 void
 gdt_init (void)
@@ -29,7 +29,7 @@ gdt_init (void)
   tss_flush ();
 }
 
-void
+static inline void
 __tss_write (uint32_t num, uint16_t ss0, uint32_t esp0)
 {
   size_t base = (size_t)&tss_entry;
@@ -46,7 +46,7 @@ __tss_write (uint32_t num, uint16_t ss0, uint32_t esp0)
       = 0x10 | 0x3;
 }
 
-void
+static inline void
 __gdt_set_gate (uint32_t num, size_t base, uint32_t limit, uint8_t access,
                 uint8_t gran)
 {

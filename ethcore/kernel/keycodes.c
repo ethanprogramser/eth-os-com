@@ -1,7 +1,6 @@
 #include "kernel/keycodes.h"
-#include "kernel/layout_mappings.h"
 
-static enum Keycode qwerty_keycodes[0xFF] = {
+const enum Keycode qwerty_keycodes[0xFF] = {
   0,
 
   KEYCODE_ESCAPE,
@@ -120,14 +119,3 @@ static enum Keycode qwerty_keycodes[0xFF] = {
   0,
   0,
 };
-
-enum Keycode
-scancode_to_keycode (enum Scancode scancode, enum LayoutMapping layout)
-{
-  switch (layout)
-  {
-  case LAYOUT_MAPPING_DVORAK: // FIXME: not implemented yet.
-  default:
-    return qwerty_keycodes[scancode & 0xFF];
-  }
-}
