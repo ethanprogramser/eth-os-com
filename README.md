@@ -70,6 +70,14 @@ sudo pacman -S dosfstools
 # Install MTools (utilities for manipulating MS-DOS filesystems)
 sudo pacman -S mtools
 ```
+NOTE: If you get this error
+``grub-mkrescue: error: xorriso not found.
+make: *** [Makefile:48: fastiso] Error 1`` make sure you have ``xorriso`` installed which is required for grub-mkrescue to create the ISO image. xorriso is a tool that manipulates ISO images, and it’s essential for making bootable ISO files in this process.
+Install ``xorriso``
+```bash
+sudo pacman -S xorriso
+```
+
 
 Optional:
 * [compiledb](https://github.com/nickdiego/compiledb) (to generate
