@@ -42,7 +42,8 @@ Tools:
 
 ## Arch linux
 Install with one command using pacman
-`pacman -S nasm gcc grub make dosfstools mtools qemu`
+
+```pacman -S nasm gcc grub make dosfstools mtools qemu```
 
 Optional:
 * [compiledb](https://github.com/nickdiego/compiledb) (to generate
