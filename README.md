@@ -40,45 +40,6 @@ Tools:
 * DOS FS Tools
 * MTools
 
-## Arch linux
-Install with one command using pacman
-
-``` bash
-pacman -S nasm gcc grub make dosfstools mtools qemu
-```
-One by one
-
-```bash
-# Install NASM (Netwide Assembler)
-sudo pacman -S nasm
-
-# Install GCC (GNU Compiler Collection)
-sudo pacman -S gcc
-
-# Install Clang (LLVM compiler)
-sudo pacman -S clang
-
-# Install GRUB (GRand Unified Bootloader)
-sudo pacman -S grub
-
-# Install GNU Make (build automation tool)
-sudo pacman -S make
-
-# Install DOS FS Tools (tools for managing DOS filesystems)
-sudo pacman -S dosfstools
-
-# Install MTools (utilities for manipulating MS-DOS filesystems)
-sudo pacman -S mtools
-```
-NOTE: If you get this error
-``grub-mkrescue: error: xorriso not found.
-make: *** [Makefile:48: fastiso] Error 1`` make sure you have ``xorriso`` installed which is required for grub-mkrescue to create the ISO image. xorriso is a tool that manipulates ISO images, and it’s essential for making bootable ISO files in this process.
-Install ``xorriso``
-```bash
-sudo pacman -S xorriso
-```
-
-
 Optional:
 * [compiledb](https://github.com/nickdiego/compiledb) (to generate
 `compile_commands.json` for clangd)
