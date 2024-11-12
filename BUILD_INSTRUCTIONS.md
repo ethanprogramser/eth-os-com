@@ -1,6 +1,6 @@
 # Building the Eth OS
 
-## Prerequisites
+## Tools and Packages
 Install the following dependencies:
 
 - NASM
@@ -9,47 +9,46 @@ Install the following dependencies:
 - GNU Make
 - DOS FS Tools
 - MTOOLS
+- GNU xorriso
 
-## Arch Linux
+Optional:
+- [compiledb](https://github.com/nickdiego/compiledb) (to generate
+`compile_commands.json` for clangd)
+
+### Arch Linux
 One command to install all the dependencies:
 
-```
-sudo pacman -S nasm grub mtools dosfstools gcc clang make
+``` sh
+sudo pacman -S nasm grub mtools dosfstools gcc make xorriso
 ```
 
-NOTE: If you get this error:
-```
-grub-mkrescue: error: xorriso not found
-make: *** [grub-mkrescue] Error 1
-```
-Then you need to install xorriso which is required for grub-mkrescue to create the ISO image:
-```
-sudo pacman -S xorriso
-```
-## Ubuntu
+### Ubuntu
 One command to install all the dependencies:
 
-```
-sudo apt install nasm grub mtools dosfstools gcc clang make
+``` sh
+sudo apt install nasm grub mtools dosfstools gcc make xorriso
 ```
 
-## Fedora
+### Fedora
 One command to install all the dependencies:
 
-```
-sudo dnf install nasm grub mtools dosfstools gcc clang make
+``` sh
+sudo dnf install nasm grub mtools dosfstools gcc make xorriso
 ```
 
-# Building the ISO
-
-## Build the ISO
-
-```
+## Building the ISO
+``` sh
+# Build ISO
 make
-```
 
-## Build the ISO and RUN in QEMU
-
-```
+# Build ISO and run QEMU
 make run
+
+# Build release ISO
+make release
+
+# OR (with `compile_commands.json' generation)
+./compile.sh
+
+./compile_and_run.sh
 ```

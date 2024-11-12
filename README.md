@@ -32,39 +32,7 @@ youtube series by [eprograms](https://www.youtube.com/@eprograms).
 * [ ] Code editor
 
 ## Manual build
-Tools:
-* NASM
-* GCC/Clang
-* GRUB
-* GNU Make
-* DOS FS Tools
-* MTools
-* GNU xorriso
-
-Optional:
-* [compiledb](https://github.com/nickdiego/compiledb) (to generate
-`compile_commands.json` for clangd)
-
-To run you need `qemu` installed.
-
-``` sh
-# To compile OS and make .iso image.
-make
-
-# To compile OS and run it.
-make run
-
-# To clean-up
-make clean
-
-# OR (needs compiledb)
-# This variant generates `compile_commands.json` for clangd
-./compile.sh
-
-./compile_and_run.sh
-
-./clean.sh
-```
+View [BUILD_INSTRUCTIONS.md](https://github.com/ethanprogramser/eth-os-com/blob/main/BUILD_INSTRUCTIONS.md)
 
 # Contributors wall
 ![list of conributors](https://contrib.rocks/image?repo=ethanprogramser/eth-os-com)
