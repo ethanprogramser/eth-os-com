@@ -40,6 +40,10 @@ Tools:
 * DOS FS Tools
 * MTools
 
+## Arch linux
+Install with one command using pacman
+`pacman -S nasm gcc grub make dosfstools mtools qemu`
+
 Optional:
 * [compiledb](https://github.com/nickdiego/compiledb) (to generate
 `compile_commands.json` for clangd)
