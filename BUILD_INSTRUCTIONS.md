@@ -16,22 +16,16 @@ Optional:
 `compile_commands.json` for clangd)
 
 ### Arch Linux
-One command to install all the dependencies:
-
 ``` sh
 sudo pacman -S nasm grub mtools dosfstools gcc make xorriso
 ```
 
 ### Ubuntu
-One command to install all the dependencies:
-
 ``` sh
 sudo apt install nasm grub mtools dosfstools gcc make xorriso
 ```
 
 ### Fedora
-One command to install all the dependencies:
-
 ``` sh
 sudo dnf install nasm grub mtools dosfstools gcc make xorriso
 ```
