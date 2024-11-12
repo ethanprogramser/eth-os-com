@@ -43,7 +43,33 @@ Tools:
 ## Arch linux
 Install with one command using pacman
 
-```pacman -S nasm gcc grub make dosfstools mtools qemu```
+``` bash
+pacman -S nasm gcc grub make dosfstools mtools qemu
+```
+One by one
+
+```bash
+# Install NASM (Netwide Assembler)
+sudo pacman -S nasm
+
+# Install GCC (GNU Compiler Collection)
+sudo pacman -S gcc
+
+# Install Clang (LLVM compiler)
+sudo pacman -S clang
+
+# Install GRUB (GRand Unified Bootloader)
+sudo pacman -S grub
+
+# Install GNU Make (build automation tool)
+sudo pacman -S make
+
+# Install DOS FS Tools (tools for managing DOS filesystems)
+sudo pacman -S dosfstools
+
+# Install MTools (utilities for manipulating MS-DOS filesystems)
+sudo pacman -S mtools
+```
 
 Optional:
 * [compiledb](https://github.com/nickdiego/compiledb) (to generate
