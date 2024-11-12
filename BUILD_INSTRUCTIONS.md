@@ -8,7 +8,7 @@ Install the following dependencies:
 - GRUB
 - GNU Make
 - DOS FS Tools
-- MTOOLS
+- MTools
 - GNU xorriso
 
 Optional:
