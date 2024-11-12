@@ -39,6 +39,7 @@ Tools:
 * GNU Make
 * DOS FS Tools
 * MTools
+* GNU xorriso
 
 Optional:
 * [compiledb](https://github.com/nickdiego/compiledb) (to generate
