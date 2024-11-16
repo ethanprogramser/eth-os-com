@@ -38,6 +38,9 @@ make
 # Build ISO and run QEMU
 make run
 
+# To build and run with KVM support
+make run-kvm
+
 # Build release ISO
 make release
 

@@ -14,6 +14,7 @@
 #define MAX_LINE_LENGTH (0xFFul)
 #define MAX_CMDS (0x7Ful)
 #define MAX_BUFFER_SIZE (0x10ul)
+#define DEFAULT_KSH_COLOR VGA_COLOR (VGA_COLOR_BLACK, VGA_COLOR_LGREY)
 
 enum KernelShellStatus
 {
@@ -173,7 +174,7 @@ void
 kernel_shell_init (void)
 {
   vga_reset ();
-  vga_set_color (VGA_COLOR (VGA_COLOR_BLACK, VGA_COLOR_WHITE));
+  vga_set_color (DEFAULT_KSH_COLOR);
   vga_clear_screen ();
 
   __kputs ("Welcome to Eth-OS Kernel Shell.\n\n");
@@ -454,7 +455,7 @@ __kernel_shell_print_control_code (char c)
     vga_set_color (VGA_COLOR (VGA_COLOR_BLACK, VGA_COLOR_DGREY));
     __kputc ('^');
     __kputc (c);
-    vga_set_color (VGA_COLOR (VGA_COLOR_BLACK, VGA_COLOR_WHITE));
+    vga_set_color (DEFAULT_KSH_COLOR);
   }
 }
 

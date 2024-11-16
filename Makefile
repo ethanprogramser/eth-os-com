@@ -52,6 +52,11 @@ run: all
 	$(EECHO) "[$(RED)QEMU$(NORMAL)] Running ISO..."
 	qemu-system-i386 -drive format=raw,file=$(OUT_DIR)/iso/$(ISO_NAME)
 
+# Run with KVM support
+run-kvm: all
+	$(EECHO) "[$(RED)QEMU$(NORMAL)] Running ISO with KVM support..."
+	qemu-system-i386 --enable-kvm -drive format=raw,file=$(OUT_DIR)/iso/$(ISO_NAME)
+
 # Clean-up everything
 clean:
 	rm -rf $(BUILD_DIR)/*
