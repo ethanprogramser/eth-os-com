@@ -47,6 +47,8 @@ static const struct KernelShellCMD cmds[MAX_CMDS] = {
   { ksh_help, "help" },
   { ksh_info, "info" },
   { ksh_echo, "echo" },
+  { ksh_loadkeys, "loadkeys"},
+  { ksh_listkeys, "listkeys"}
 };
 
 static const char keycode_mapping_normal[0xFF]
