@@ -5,6 +5,7 @@ enum LayoutMapping
 {
   LAYOUT_MAPPING_QWERTY = 0,
   LAYOUT_MAPPING_DVORAK = 1,
+  LAYOUT_MAPPING_AZERTY = 2
 };
 
 #endif // __K_LAYOUT_MAPPINGS_H__

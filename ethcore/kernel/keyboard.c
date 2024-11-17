@@ -5,7 +5,6 @@
 #include "kernel/util.h"
 #include "klib/kdef.h"
 #include "klib/kmemory.h"
-
 #include "klib/kio.h"
 
 #define __K_KEYBOARD_MAX_EVENTS 0xFF
@@ -14,6 +13,9 @@ struct KeyboardState
 {
   struct KeyboardEvent events[__K_KEYBOARD_MAX_EVENTS];
   size_t event_index;
+
+  // the current keyboard's layout
+  enum LayoutMapping current_layout_mapping;
 };
 
 static struct KeyboardState keyboard_state = { 0 };
@@ -24,6 +26,9 @@ void
 keyboard_init (void)
 {
   __kmemset (&keyboard_state, 0, sizeof (struct KeyboardState));
+
+  // we start in qwerty layout
+  keyboard_state.current_layout_mapping = LAYOUT_MAPPING_QWERTY;
   irq_install_handler (1, keyboard_handler);
 }
 
@@ -36,7 +41,7 @@ keyboard_handler (struct InterruptRegisters *regs)
   enum KeyboardEventType type = (data & 0x80) == 0
                                     ? KEYBOARD_EVENT_TYPE_PRESSED
                                     : KEYBOARD_EVENT_TYPE_RELEASED;
-  enum Keycode keycode = scancode_to_keycode (scancode, LAYOUT_MAPPING_QWERTY);
+  enum Keycode keycode = scancode_to_keycode (scancode, keyboard_state.current_layout_mapping);
   __keyboard_add_event_to_list (&(struct KeyboardEvent){
       .keycode = keycode,
       .event_type = type,
@@ -62,4 +67,10 @@ __keyboard_add_event_to_list (struct KeyboardEvent *event)
   keyboard_state.events[keyboard_state.event_index] = *event;
   if (keyboard_state.event_index <= __K_KEYBOARD_MAX_EVENTS)
     keyboard_state.event_index++;
+}
+
+void
+keyboard_change_layout (enum LayoutMapping new_layout)
+{
+  keyboard_state.current_layout_mapping = new_layout;
 }

@@ -24,5 +24,6 @@ typedef void (*KeyboardEventHandler) (struct KeyboardEvent *, void *);
 void keyboard_init (void);
 void keyboard_handler (struct InterruptRegisters *);
 void keyboard_for_each_event (KeyboardEventHandler, void *data);
+void keyboard_change_layout(enum LayoutMapping);
 
 #endif // __K_KEYBOARD_H__

@@ -119,3 +119,128 @@ const enum Keycode qwerty_keycodes[0xFF] = {
   0,
   0,
 };
+
+const enum Keycode azerty_keycodes[0xFF] = {
+  0,
+
+  KEYCODE_ESCAPE,
+
+  KEYCODE_1,
+  KEYCODE_2,
+  KEYCODE_3,
+  KEYCODE_4,
+  KEYCODE_5,
+  KEYCODE_6,
+  KEYCODE_7,
+  KEYCODE_8,
+  KEYCODE_9,
+  KEYCODE_0,
+
+  KEYCODE_MINUS,
+  KEYCODE_EQUAL,
+  KEYCODE_BACKSPACE,
+  KEYCODE_TAB,
+
+  KEYCODE_A,
+  KEYCODE_Z,
+  KEYCODE_E,
+  KEYCODE_R,
+  KEYCODE_T,
+  KEYCODE_Y,
+  KEYCODE_U,
+  KEYCODE_I,
+  KEYCODE_O,
+  KEYCODE_P,
+  0, // ^
+  0, // $
+  KEYCODE_RETURN,
+
+  KEYCODE_LCONTROL,
+
+  KEYCODE_Q,
+  KEYCODE_S,
+  KEYCODE_D,
+  KEYCODE_F,
+  KEYCODE_G,
+  KEYCODE_H,
+  KEYCODE_J,
+  KEYCODE_K,
+  KEYCODE_L,
+  KEYCODE_M,
+  KEYCODE_QUOT, // ù
+
+  KEYCODE_TILDE, // %
+
+  KEYCODE_LSHIFT,
+
+  0, // "<"
+
+  KEYCODE_W,
+  KEYCODE_X,
+  KEYCODE_C,
+  KEYCODE_V,
+  KEYCODE_B,
+  KEYCODE_N,
+  KEYCODE_COMMA,
+  KEYCODE_SEMICOL,
+  0, // ":" 
+  0, // "!"
+  0,
+  0,
+  0,
+
+  KEYCODE_SPACE,
+  KEYCODE_CAPS,
+
+  KEYCODE_F1,
+  KEYCODE_F2,
+  KEYCODE_F3,
+  KEYCODE_F4,
+  KEYCODE_F5,
+  KEYCODE_F6,
+  KEYCODE_F7,
+  KEYCODE_F8,
+  KEYCODE_F9,
+  KEYCODE_F10,
+
+  0,
+
+  KEYCODE_LOCK,
+
+  KEYCODE_HOME,
+  KEYCODE_UP,
+  KEYCODE_PRIOR,
+  0,
+  KEYCODE_LEFT,
+  0,
+  KEYCODE_RIGHT,
+  0,
+  KEYCODE_END,
+  KEYCODE_DOWN,
+  KEYCODE_NEXT,
+  KEYCODE_INSERT,
+  KEYCODE_DELETE,
+  0,
+  0,
+  0,
+
+  KEYCODE_F11,
+  KEYCODE_F12,
+
+  0,
+  0,
+
+  0,
+  0,
+
+  KEYCODE_MENU,
+
+  0,
+  0,
+};
+
+const int MAX_LAYOUT_ENTRY = 2;
+const struct LayoutMapTableEntry layout_map_table[2] = {
+  {"qwerty", LAYOUT_MAPPING_QWERTY},
+  {"azerty", LAYOUT_MAPPING_AZERTY},
+};

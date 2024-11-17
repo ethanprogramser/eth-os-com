@@ -106,6 +106,7 @@ enum Keycode
 };
 
 extern const enum Keycode qwerty_keycodes[0xFF];
+extern const enum Keycode azerty_keycodes[0xFF];
 
 static inline enum Keycode
 scancode_to_keycode (enum Scancode scancode, enum LayoutMapping layout)
@@ -115,7 +116,19 @@ scancode_to_keycode (enum Scancode scancode, enum LayoutMapping layout)
   case LAYOUT_MAPPING_DVORAK: // FIXME: not implemented yet.
   default:
     return qwerty_keycodes[scancode & 0xFF];
+
+  case LAYOUT_MAPPING_AZERTY:
+    return azerty_keycodes[scancode & 0xFF];
+  
   }
 }
+
+struct LayoutMapTableEntry {
+  char map_name[0xFF];
+  enum LayoutMapping mapping_value;
+};
+
+extern const int MAX_LAYOUT_ENTRY;
+extern const struct LayoutMapTableEntry layout_map_table[2];
 
 #endif // __K_KEYCODES_H__
