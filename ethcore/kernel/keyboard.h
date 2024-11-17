@@ -2,6 +2,7 @@
 #define __K_KEYBOARD_H__
 
 #include "kernel/keycodes.h"
+#include "kernel/layout_mappings.h"
 #include "klib/kbool.h"
 
 struct InterruptRegisters;
@@ -24,6 +25,7 @@ typedef void (*KeyboardEventHandler) (struct KeyboardEvent *, void *);
 void keyboard_init (void);
 void keyboard_handler (struct InterruptRegisters *);
 void keyboard_for_each_event (KeyboardEventHandler, void *data);
-void keyboard_change_layout(enum LayoutMapping);
+void keyboard_set_layout (enum LayoutMapping);
+enum LayoutMapping keyboard_get_layout (void);
 
 #endif // __K_KEYBOARD_H__

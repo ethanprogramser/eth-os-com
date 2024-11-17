@@ -2,6 +2,8 @@
 #include "kernel/kernel_shell_cmds.h"
 #include "kernel/keyboard.h"
 #include "kernel/keycodes.h"
+#include "kernel/layout_layers.h"
+#include "kernel/layout_mappings.h"
 #include "kernel/util.h"
 #include "kernel/vga.h"
 #include "klib/kctype.h"
@@ -42,124 +44,10 @@ static struct KernelShellState kernel_shell_state = { 0 };
 
 static const char *prefix = "ksh> ";
 
-static const struct KernelShellCMD cmds[MAX_CMDS] = {
-  { ksh_clear, "clear" },
-  { ksh_help, "help" },
-  { ksh_info, "info" },
-  { ksh_echo, "echo" },
-  { ksh_loadkeys, "loadkeys"},
-  { ksh_listkeys, "listkeys"}
-};
-
-static const char keycode_mapping_normal[0xFF]
-    = { 0,
-
-        // 0x01-0x04
-        0, ' ', 0, 0,
-
-        // 0x05-0x0F
-        '`', '-', '=', '\\', '[', ']', ';', '\'', ',', '.', '/',
-
-        // 0x10-0x19
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-
-        // 0x1A-0x1F (reserved)
-        0, 0, 0, 0, 0, 0,
-
-        // 0x20-0x39
-        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
-        'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-
-        // 0x3A-0x3F (reserved)
-        0, 0, 0, 0, 0, 0,
-
-        // 0x40-0x42
-        0, 0, 0,
-
-        // 0x43-0x4F (reserved)
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-
-        // 0x50-0x5B
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-
-        // 0x5C
-        0,
-
-        // 0x5D-0x5F (reserved)
-        0, 0, 0,
-
-        // 0x60-0x63
-        0, 0, 0, 0,
-
-        // 0x64-0x6F (reserved)
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-
-        // 0x70-0x71
-        0, 0,
-
-        // 0x72-0x75
-        0, 0, 0, 0,
-
-        // 0x76-0x7F (reserved)
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-
-        // 0x80-0x87
-        0, 0, 0, 0, 0, 0, 0, 0 };
-
-static const char keycode_mapping_shifted[0xFF]
-    = { 0,
-
-        // 0x01-0x04
-        0, ' ', 0, 0,
-
-        // 0x05-0x0F
-        '~', '_', '+', '|', '{', '}', ':', '"', '<', '>', '?',
-
-        // 0x10-0x19
-        ')', '!', '@', '#', '$', '%', '^', '&', '*', '(',
-
-        // 0x1A-0x1F (reserved)
-        0, 0, 0, 0, 0, 0,
-
-        // 0x20-0x39
-        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-        'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-
-        // 0x3A-0x3F (reserved)
-        0, 0, 0, 0, 0, 0,
-
-        // 0x40-0x42
-        0, 0, 0,
-
-        // 0x43-0x4F (reserved)
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-
-        // 0x50-0x5B
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-
-        // 0x5C
-        0,
-
-        // 0x5D-0x5F (reserved)
-        0, 0, 0,
-
-        // 0x60-0x63
-        0, 0, 0, 0,
-
-        // 0x64-0x6F (reserved)
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-
-        // 0x70-0x71
-        0, 0,
-
-        // 0x72-0x75
-        0, 0, 0, 0,
-
-        // 0x76-0x7F (reserved)
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-
-        // 0x80-0x87
-        0, 0, 0, 0, 0, 0, 0, 0 };
+static const struct KernelShellCMD cmds[MAX_CMDS]
+    = { { ksh_clear, "clear" },       { ksh_help, "help" },
+        { ksh_info, "info" },         { ksh_echo, "echo" },
+        { ksh_loadkeys, "loadkeys" }, { ksh_listkeys, "listkeys" } };
 
 static inline char __kernel_shell_translate_keycode (enum Keycode keycode,
                                                      bool shifted);
@@ -232,8 +120,33 @@ kernel_shell_loop (void)
 static inline char
 __kernel_shell_translate_keycode (enum Keycode keycode, bool shifted)
 {
-  return shifted ? keycode_mapping_shifted[keycode]
-                 : keycode_mapping_normal[keycode];
+  char *layer_normal = 0;
+  char *layer_shifted = 0;
+
+  switch (keyboard_get_layout ())
+  {
+  case LAYOUT_MAPPING_QWERTY:
+    layer_normal = (char *)qwerty_layer_normal;
+    layer_shifted = (char *)qwerty_layer_shifted;
+    break;
+
+  case LAYOUT_MAPPING_AZERTY:
+    layer_normal = (char *)azerty_layer_normal;
+    layer_shifted = (char *)azerty_layer_shifted;
+    break;
+
+  case LAYOUT_MAPPING_DVORAK:
+    // FIXME: Not implemented yet.
+    break;
+
+  default:
+    break;
+  }
+
+  if (layer_normal == 0 || layer_shifted == 0)
+    return 0;
+
+  return shifted ? layer_shifted[keycode] : layer_normal[keycode];
 }
 
 static inline void

@@ -103,32 +103,53 @@ enum Keycode
   KEYCODE_RALT = 0x85,
   KEYCODE_LSUPER = 0x86,
   KEYCODE_RSUPER = 0x87,
+
+  KEYCODE_EXCL = 0x90,
+  KEYCODE_AT = 0x91,
+  KEYCODE_HASH = 0x92,
+  KEYCODE_DOLLARSIGN = 0x93,
+  KEYCODE_PERCENT = 0x94,
+  KEYCODE_ARROW = 0x95,
+  KEYCODE_AMPERSAND = 0x96,
+  KEYCODE_STAR = 0x97,
+  KEYCODE_PARENO = 0x98,
+  KEYCODE_PARENC = 0x99,
+  KEYCODE_UNDERLINE = 0x9A,
+  KEYCODE_PLUS = 0x9B,
+
+  KEYCODE_BRACEO = 0x100,
+  KEYCODE_BRACEC = 0x101,
+  KEYCODE_PIPE = 0x102,
+  KEYCODE_DDOT = 0x103,
+  KEYCODE_DQUOT = 0x104,
+  KEYCODE_LTHAN = 0x105,
+  KEYCODE_GTHAN = 0x106,
+  KEYCODE_QMARK = 0x107,
+
+  KEYCODE_MAX_KEYCODES,
 };
 
 extern const enum Keycode qwerty_keycodes[0xFF];
 extern const enum Keycode azerty_keycodes[0xFF];
+
+#define MAX_LAYOUT_TABLE_ENTRIES (2ul)
+extern const struct LayoutMapTableEntry
+    layout_map_table[MAX_LAYOUT_TABLE_ENTRIES];
 
 static inline enum Keycode
 scancode_to_keycode (enum Scancode scancode, enum LayoutMapping layout)
 {
   switch (layout)
   {
-  case LAYOUT_MAPPING_DVORAK: // FIXME: not implemented yet.
-  default:
+  case LAYOUT_MAPPING_QWERTY:
     return qwerty_keycodes[scancode & 0xFF];
 
   case LAYOUT_MAPPING_AZERTY:
     return azerty_keycodes[scancode & 0xFF];
-  
+
+  default:
+    return 0;
   }
 }
-
-struct LayoutMapTableEntry {
-  char map_name[0xFF];
-  enum LayoutMapping mapping_value;
-};
-
-extern const int MAX_LAYOUT_ENTRY;
-extern const struct LayoutMapTableEntry layout_map_table[2];
 
 #endif // __K_KEYCODES_H__

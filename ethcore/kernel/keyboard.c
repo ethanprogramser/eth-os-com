@@ -4,8 +4,8 @@
 #include "kernel/layout_mappings.h"
 #include "kernel/util.h"
 #include "klib/kdef.h"
-#include "klib/kmemory.h"
 #include "klib/kio.h"
+#include "klib/kmemory.h"
 
 #define __K_KEYBOARD_MAX_EVENTS 0xFF
 
@@ -41,7 +41,8 @@ keyboard_handler (struct InterruptRegisters *regs)
   enum KeyboardEventType type = (data & 0x80) == 0
                                     ? KEYBOARD_EVENT_TYPE_PRESSED
                                     : KEYBOARD_EVENT_TYPE_RELEASED;
-  enum Keycode keycode = scancode_to_keycode (scancode, keyboard_state.current_layout_mapping);
+  enum Keycode keycode
+      = scancode_to_keycode (scancode, keyboard_state.current_layout_mapping);
   __keyboard_add_event_to_list (&(struct KeyboardEvent){
       .keycode = keycode,
       .event_type = type,
@@ -70,7 +71,13 @@ __keyboard_add_event_to_list (struct KeyboardEvent *event)
 }
 
 void
-keyboard_change_layout (enum LayoutMapping new_layout)
+keyboard_set_layout (enum LayoutMapping new_layout)
 {
   keyboard_state.current_layout_mapping = new_layout;
+}
+
+enum LayoutMapping
+keyboard_get_layout (void)
+{
+  return keyboard_state.current_layout_mapping;
 }

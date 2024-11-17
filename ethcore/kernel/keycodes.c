@@ -1,4 +1,5 @@
 #include "kernel/keycodes.h"
+#include "kernel/layout_mappings.h"
 
 const enum Keycode qwerty_keycodes[0xFF] = {
   0,
@@ -151,8 +152,8 @@ const enum Keycode azerty_keycodes[0xFF] = {
   KEYCODE_I,
   KEYCODE_O,
   KEYCODE_P,
-  0, // ^
-  0, // $
+  KEYCODE_ARROW,
+  KEYCODE_DOLLARSIGN,
   KEYCODE_RETURN,
 
   KEYCODE_LCONTROL,
@@ -167,13 +168,13 @@ const enum Keycode azerty_keycodes[0xFF] = {
   KEYCODE_K,
   KEYCODE_L,
   KEYCODE_M,
-  KEYCODE_QUOT, // ù
+  0,
 
-  KEYCODE_TILDE, // %
+  KEYCODE_PERCENT,
 
   KEYCODE_LSHIFT,
 
-  0, // "<"
+  KEYCODE_LTHAN,
 
   KEYCODE_W,
   KEYCODE_X,
@@ -183,8 +184,8 @@ const enum Keycode azerty_keycodes[0xFF] = {
   KEYCODE_N,
   KEYCODE_COMMA,
   KEYCODE_SEMICOL,
-  0, // ":" 
-  0, // "!"
+  KEYCODE_DDOT,
+  KEYCODE_EXCL,
   0,
   0,
   0,
@@ -239,8 +240,7 @@ const enum Keycode azerty_keycodes[0xFF] = {
   0,
 };
 
-const int MAX_LAYOUT_ENTRY = 2;
-const struct LayoutMapTableEntry layout_map_table[2] = {
-  {"qwerty", LAYOUT_MAPPING_QWERTY},
-  {"azerty", LAYOUT_MAPPING_AZERTY},
+const struct LayoutMapTableEntry layout_map_table[MAX_LAYOUT_TABLE_ENTRIES] = {
+  { "qwerty", LAYOUT_MAPPING_QWERTY },
+  { "azerty", LAYOUT_MAPPING_AZERTY },
 };
