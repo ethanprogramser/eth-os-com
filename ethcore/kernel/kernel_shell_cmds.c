@@ -10,12 +10,12 @@
 
 static const char *ksh_help_output
     = { "List of all available commands\n"
-        "* help -- Display this message\n"
-        "* info -- Display information about the kernel\n"
-        "* clear -- Clear screen\n"
-        "* echo [string] -- Output string to the screen\n"
-        "* loadkeys [keymap] -- Load a specific keymap (check `listkeys')\n"
-        "* listkeys -- List all the available keymaps\n"
+        " * help -- Display this message\n"
+        " * info -- Display information about the kernel\n"
+        " * clear -- Clear screen\n"
+        " * echo [string] -- Output string to the screen\n"
+        " * loadkeys [keymap] -- Load a specific keymap (check `listkeys')\n"
+        " * listkeys -- List all the available keymaps\n"
         "\n" };
 
 void
