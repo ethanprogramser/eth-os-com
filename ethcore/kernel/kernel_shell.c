@@ -44,10 +44,11 @@ static struct KernelShellState kernel_shell_state = { 0 };
 
 static const char *prefix = "ksh> ";
 
-static const struct KernelShellCMD cmds[MAX_CMDS]
-    = { { ksh_clear, "clear" },       { ksh_help, "help" },
-        { ksh_info, "info" },         { ksh_echo, "echo" },
-        { ksh_loadkeys, "loadkeys" }, { ksh_listkeys, "listkeys" } };
+static const struct KernelShellCMD cmds[MAX_CMDS] = {
+  { ksh_clear, "clear" },       { ksh_help, "help" },
+  { ksh_info, "info" },         { ksh_echo, "echo" },
+  { ksh_loadkeys, "loadkeys" }, { ksh_listkeys, "listkeys" },
+};
 
 static inline char __kernel_shell_translate_keycode (enum Keycode keycode,
                                                      bool shifted);
