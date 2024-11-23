@@ -36,6 +36,7 @@ View [BUILD_INSTRUCTIONS.md](https://github.com/ethanprogramser/eth-os-com/blob/
 <div align="center">
 
 ![Github Contributors](https://img.shields.io/github/contributors/ethanprogramser/eth-os-com)
+
 ![list of conributors](https://contrib.rocks/image?repo=ethanprogramser/eth-os-com)
 
 </div>
