@@ -4,8 +4,6 @@
 <img src="./.github/imgs/os-screenshot.png" />
 
 ![Badge Workflow](https://github.com/ethanprogramser/eth-os-com/actions/workflows/ci.yml/badge.svg)
-![Github Last Commit](https://img.shields.io/github/last-commit/ethanprogramser/eth-os-com)
-![Github Contributors](https://img.shields.io/github/contributors/ethanprogramser/eth-os-com)
 ![GitHub Repo stars](https://img.shields.io/github/stars/ethanprogramser/eth-os-com)
 
 </div>
@@ -35,4 +33,9 @@ youtube series by [eprograms](https://www.youtube.com/@eprograms).
 View [BUILD_INSTRUCTIONS.md](https://github.com/ethanprogramser/eth-os-com/blob/main/BUILD_INSTRUCTIONS.md)
 
 # Contributors wall
+<div align="center">
+
+![Github Contributors](https://img.shields.io/github/contributors/ethanprogramser/eth-os-com)
 ![list of conributors](https://contrib.rocks/image?repo=ethanprogramser/eth-os-com)
+
+</div>
